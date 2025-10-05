@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>macOS Portfolio</title>
+    <title>Portfolio</title>
+    <link rel="icon" type="image/png" href="dev.png" />
     <style>
         * {
             margin: 0;
@@ -255,6 +257,14 @@
             padding: 20px;
             overflow: auto;
             background: #1e1e1e;
+        }
+
+        .portfolio-section {
+            display: none;
+        }
+
+        .portfolio-section.active {
+            display: block;
         }
 
         .finder-toolbar {
@@ -668,7 +678,7 @@
             <div id="widget-date"></div>
             <div class="widget-section">
                 <h3>PORTFOLIO</h3>
-                <p><strong>Devpratap Chauhan</strong><br>Full Stack Developer<br>Passionate about creating amazing web experiences</p>
+                <p><strong><h1>Devpratap Chauhan</h1></strong><br>Full Stack Developer<br>Passionate about creating amazing web experiences</p>
             </div>
             <div class="widget-section">
                 <h3>SKILLS</h3>
@@ -683,38 +693,155 @@
                     <div class="window-control minimize" onclick="minimizeWindow('finder-window')"></div>
                     <div class="window-control maximize" onclick="maximizeWindow('finder-window')"></div>
                 </div>
-                <div class="window-title">Finder</div>
+                <div class="window-title">About Devpratap</div>
             </div>
             <div class="window-content" id="finder-content">
                 <div class="finder-sidebar">
                     <div class="finder-section">
-                        <h4>Favorites</h4>
-                        <div class="finder-item active">📁 Portfolio</div>
-                        <div class="finder-item">📁 Projects</div>
-                        <div class="finder-item">📄 Documents</div>
-                        <div class="finder-item">⬇️ Downloads</div>
+                        <div class="finder-item active" data-section="about">👤 About Me</div>
+                        <div class="finder-item" data-section="education">🎓 Education</div>
+                        <div class="finder-item" data-section="skills">🛠️ Skills</div>
+                        <div class="finder-item" data-section="projects">💼 Projects</div>
+                        <div class="finder-item" data-section="resume">📄 Resume</div>
+                        <div style="margin-top: 20px; padding: 8px 12px;">
+                            <button style="width: 100%; padding: 8px; background: rgba(255, 20, 147, 0.8); border: none; border-radius: 6px; color: white; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                ❤️ Sponsor
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="finder-main">
-                    <div class="finder-toolbar">
-                        <input type="text" class="finder-search" placeholder="Search Portfolio" id="finder-search">
+                <div class="finder-main" id="portfolio-main">
+                    <div class="portfolio-section active" id="section-about">
+                        <div style="text-align: center; margin-bottom: 30px;">
+
+                            <img src="dev.png" alt="Devpratap Chauhan" style="width: 130px; height: 130px; border-radius: 50%; margin-bottom: 15px; border: 4px solid #667eea;">
+
+                            <h1 style="font-size: 28px; margin-bottom: 10px;">my name is <span style="color: #667eea;">Devpratap Chauhan</span>,</h1>
+                            <h2 style="font-size: 24px; color: #ff1493;">I'm a <span style="color: #ff1493;">Full Stack Developer!</span></h2>
+                            <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin: 20px auto;"></div>
+                        </div>
+                        <div style="max-width: 700px; margin: 0 auto; line-height: 1.8;">
+                            <p style="margin-bottom: 15px;">📚 I'm a passionate developer currently pursuing Computer Science. I love creating amazing web experiences that solve real problems.</p>
+                            <p style="margin-bottom: 15px;">💻 I enjoy building awesome software that solves practical problems and makes people's lives easier.</p>
+                            <p style="margin-bottom: 15px;">🎮 When I am not coding my next project, I like to spend my time reading books, playing games, or exploring new technologies.</p>
+                            <p style="margin-bottom: 15px;">✨ And I also have interest in UI/UX Design & Modern Web Technologies!</p>
+                            <p style="margin-top: 25px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-left: 3px solid #667eea; border-radius: 4px;">
+                                📧 Contact: devgurjar9897@gmail.com | GitHub: github.com/devchauhann
+                            </p>
+                        </div>
                     </div>
-                    <div class="finder-grid">
-                        <div class="finder-folder">
-                            <div class="folder-icon">📋</div>
-                            <div class="folder-name">About Me</div>
+
+                    <div class="portfolio-section" id="section-skills">
+                        <h1 style="font-size: 28px; margin-bottom: 10px; text-align: center;">Technical Skills</h1>
+                        <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin: 20px auto 30px;"></div>
+                        
+                        <p style="margin-bottom: 15px;">→ I've worked with a wide variety of programming languages & frameworks.</p>
+                        <p style="margin-bottom: 15px;">→ My areas of expertise are <span style="color: #ff9500;">front-end development, React.js & javascript!</span></p>
+                        <p style="margin-bottom: 30px;">→ Here are my most frequently used</p>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 800px; margin: 0 auto;">
+                            <div>
+                                <h3 style="font-size: 20px; margin-bottom: 20px; text-align: center;">Languages & Tools</h3>
+                                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                                    <span style="background: #f0db4f; color: #000; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">JavaScript</span>
+                                    <span style="background: #00599c; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">C++</span>
+                                    <span style="background: #3776ab; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Python</span>
+                                    <span style="background: #e34c26; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">HTML5</span>
+                                    <span style="background: #cc6699; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Sass</span>
+                                    <span style="background: #f34f29; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Git</span>
+                                    <span style="background: #ffa611; color: #000; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Firebase</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 20px; margin-bottom: 20px; text-align: center;">Frameworks & Libraries</h3>
+                                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                                    <span style="background: #000; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Next</span>
+                                    <span style="background: #61dafb; color: #000; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">React</span>
+                                    <span style="background: #02569b; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Flutter</span>
+                                    <span style="background: #38bdf8; color: #000; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Tailwind CSS</span>
+                                    <span style="background: #68a063; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Node.js</span>
+                                    <span style="background: #0769ad; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">jQuery</span>
+                                    <span style="background: #764abc; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Redux</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="finder-folder">
-                            <div class="folder-icon">💼</div>
-                            <div class="folder-name">My Projects</div>
+
+                        <p style="margin-top: 30px; text-align: center;">→ And of course, <span style="background: #0078d4; color: #fff; padding: 4px 10px; border-radius: 4px; font-weight: 600;">Linux</span> !</p>
+                    </div>
+
+                    <div class="portfolio-section" id="section-education">
+                        <h1 style="font-size: 28px; margin-bottom: 10px; text-align: center;">Education</h1>
+                        <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin: 20px auto 40px;"></div>
+                        
+                        <div style="max-width: 700px; margin: 0 auto;">
+                            <div style="background: rgba(102, 126, 234, 0.1); padding: 25px; border-radius: 12px; border-left: 4px solid #667eea; margin-bottom: 20px;">
+                                <h3 style="font-size: 20px; margin-bottom: 10px;">🎓 Computer Science</h3>
+                                <p style="opacity: 0.8; margin-bottom: 8px;">Currently Pursuing</p>
+                                <p style="line-height: 1.6;">Focused on web development, data structures, algorithms, and modern software engineering practices.</p>
+                            </div>
+
+                            <div style="background: rgba(102, 126, 234, 0.1); padding: 25px; border-radius: 12px; border-left: 4px solid #667eea;">
+                                <h3 style="font-size: 20px; margin-bottom: 10px;">💼 Experience</h3>
+                                <p style="opacity: 0.8; margin-bottom: 8px;">Building Real-World Projects</p>
+                                <p style="line-height: 1.6;">Hands-on experience with React, Node.js, and modern web technologies through various personal and academic projects.</p>
+                            </div>
                         </div>
-                        <div class="finder-folder">
-                            <div class="folder-icon">📄</div>
-                            <div class="folder-name">Resume</div>
+                    </div>
+
+                    <div class="portfolio-section" id="section-projects">
+                        <h1 style="font-size: 28px; margin-bottom: 10px; text-align: center;">My Projects</h1>
+                        <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin: 20px auto 40px;"></div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                            <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; transition: transform 0.2s;">
+                                <div style="font-size: 40px; margin-bottom: 15px;">🌐</div>
+                                <h3 style="font-size: 18px; margin-bottom: 10px;">Portfolio Website</h3>
+                                <p style="opacity: 0.8; line-height: 1.6; font-size: 14px;">A modern macOS-style portfolio showcasing my skills and projects.</p>
+                                <div style="margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">HTML</span>
+                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">CSS</span>
+                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">JavaScript</span>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; transition: transform 0.2s;">
+                                <div style="font-size: 40px; margin-bottom: 15px;">⚛️</div>
+                                <h3 style="font-size: 18px; margin-bottom: 10px;">React Applications</h3>
+                                <p style="opacity: 0.8; line-height: 1.6; font-size: 14px;">Various React projects including todo apps, weather apps, and more.</p>
+                                <div style="margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">React</span>
+                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">JavaScript</span>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; transition: transform 0.2s;">
+                                <div style="font-size: 40px; margin-bottom: 15px;">🎨</div>
+                                <h3 style="font-size: 18px; margin-bottom: 10px;">UI/UX Designs</h3>
+                                <p style="opacity: 0.8; line-height: 1.6; font-size: 14px;">Modern and responsive design projects with focus on user experience.</p>
+                                <div style="margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">CSS</span>
+                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">Tailwind</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="finder-folder">
-                            <div class="folder-icon">📧</div>
-                            <div class="folder-name">Contact</div>
+                    </div>
+
+                    <div class="portfolio-section" id="section-resume">
+                        <h1 style="font-size: 28px; margin-bottom: 10px; text-align: center;">Resume</h1>
+                        <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin: 20px auto 40px;"></div>
+                        
+                        <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+                            <p style="margin-bottom: 30px; line-height: 1.8;">Download my resume to learn more about my experience, skills, and projects.</p>
+                            <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+                                📄 Download Resume
+                            </button>
+                            <div style="margin-top: 40px; padding: 20px; background: rgba(102, 126, 234, 0.1); border-radius: 12px;">
+                                <h3 style="margin-bottom: 15px;">Quick Links</h3>
+                                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                    <a href="https://github.com/devchauhann" style="color: #667eea; text-decoration: none; padding: 8px 16px; background: rgba(255,255,255,0.1); border-radius: 6px;">GitHub</a>
+                                    <a href="mailto:devgurjar9897@gmail.com" style="color: #667eea; text-decoration: none; padding: 8px 16px; background: rgba(255,255,255,0.1); border-radius: 6px;">Email</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -812,11 +939,11 @@
             <div class="window-content" id="terminal-content">
                 <div id="terminal-output">
                     <div class="terminal-output">Last login: Sun Oct 5 2025</div>
-                    <div class="terminal-output">mac Terminal v1.0</div>
+                    <div class="terminal-output">macOS Portfolio Terminal v1.0</div>
                     <div class="terminal-output">Type 'help' for available commands</div>
                 </div>
                 <div class="terminal-input-line">
-                    <span class="terminal-prompt">devchauhan@mac ~ %</span>
+                    <span class="terminal-prompt">user@macOS ~ %</span>
                     <input type="text" class="terminal-input" id="terminal-input" autocomplete="off">
                 </div>
             </div>
@@ -1149,7 +1276,7 @@
                         setTimeout(() => openApp('finder'), 500);
                         break;
                     case 'contact':
-                        response.textContent = 'Email: contact@example.com | GitHub: github.com/user';
+                        response.textContent = 'Email: devgurjar9897@gmail.com | GitHub: github.com/devchauhann';
                         break;
                     default:
                         response.textContent = `Command not found: ${command}. Type 'help' for available commands.`;
@@ -1160,23 +1287,13 @@
         }
 
         function initFinder() {
-            const searchInput = document.getElementById('finder-search');
-            searchInput.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                document.querySelectorAll('.finder-folder').forEach(folder => {
-                    const name = folder.querySelector('.folder-name').textContent.toLowerCase();
-                    folder.style.display = name.includes(query) ? 'flex' : 'none';
-                });
-            });
-            document.querySelectorAll('.finder-item').forEach(item => {
+            document.querySelectorAll('.finder-item[data-section]').forEach(item => {
                 item.addEventListener('click', () => {
+                    const section = item.dataset.section;
                     document.querySelectorAll('.finder-item').forEach(i => i.classList.remove('active'));
                     item.classList.add('active');
-                });
-            });
-            document.querySelectorAll('.finder-folder').forEach(folder => {
-                folder.addEventListener('dblclick', () => {
-                    alert(`Opening: ${folder.querySelector('.folder-name').textContent}`);
+                    document.querySelectorAll('.portfolio-section').forEach(s => s.classList.remove('active'));
+                    document.getElementById(`section-${section}`).classList.add('active');
                 });
             });
         }
