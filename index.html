@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="website.png" />
+    <title>macOS Portfolio</title>
     <style>
         * {
             margin: 0;
@@ -14,721 +12,1206 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            background: #000;
         }
 
-        /* Animated gradient background with particles */
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
+        #desktop {
+            position: relative;
             width: 100%;
             height: 100%;
-            z-index: 0;
-            background: linear-gradient(180deg, #1a1a2e 0%, #2d1b4e 50%, #5b3a8f 100%);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
-        /* Header - transparent initially, solid on scroll */
-        header {
+        #menubar {
             position: fixed;
             top: 0;
-            width: 100%;
-            padding: 1.5rem 5%;
-            z-index: 1000;
-            transition: all 0.4s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header.scrolled {
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 1px;
-        }
-
-        nav ul {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
             left: 0;
-            width: 0;
-            height: 2px;
-            background: #8b5cf6;
-            transition: width 0.3s;
+            right: 0;
+            height: 24px;
+            background: rgba(40, 40, 45, 0.85);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            z-index: 9999;
+            color: #fff;
+            font-size: 13px;
+            border-bottom: 0.5px solid rgba(0, 0, 0, 0.3);
         }
 
-        nav a:hover::after {
-            width: 100%;
+        .menu-item {
+            padding: 0 10px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
-        /* Mobile menu toggle */
-        .menu-toggle {
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #apple-logo {
+            padding: 0 8px;
+        }
+
+        #menu-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #menu-time {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        #desktop-widget {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            width: 320px;
+            background: rgba(40, 40, 45, 0.75);
+            backdrop-filter: blur(40px);
+            border-radius: 18px;
+            padding: 20px;
+            color: #fff;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            cursor: move;
+            user-select: none;
+        }
+
+        #widget-time {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        #widget-date {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .widget-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .widget-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            opacity: 0.6;
+        }
+
+        .widget-section p {
+            font-size: 13px;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .window {
+            position: absolute;
+            background: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
             display: none;
             flex-direction: column;
+            min-width: 600px;
+            min-height: 400px;
+        }
+
+        .window.active {
+            display: flex;
+        }
+
+        .window-header {
+            height: 52px;
+            background: #2b2b2b;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            cursor: move;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .window-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
             cursor: pointer;
-            gap: 5px;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: #fff;
-            transition: 0.3s;
-        }
-
-        /* Content wrapper */
-        .content {
+            transition: all 0.2s;
             position: relative;
-            z-index: 1;
         }
 
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .window-control.close {
+            background: #ff5f57;
+        }
+
+        .window-control.minimize {
+            background: #febc2e;
+        }
+
+        .window-control.maximize {
+            background: #28c840;
+        }
+
+        .window-control:hover::after {
+            position: absolute;
+            font-size: 9px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.7);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .window-control.close:hover::after {
+            content: '×';
+        }
+
+        .window-control.minimize:hover::after {
+            content: '−';
+        }
+
+        .window-control.maximize:hover::after {
+            content: '+';
+        }
+
+        .window-title {
+            flex: 1;
             text-align: center;
-            padding: 2rem;
-            perspective: 1000px;
-        }
-
-        .hero-content {
-            max-width: 900px;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 300;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        .hero .tagline {
-            font-size: clamp(1.2rem, 3vw, 2rem);
-            font-weight: 300;
-            opacity: 0.9;
-            margin-bottom: 3rem;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 3rem;
-            background: rgba(139, 92, 246, 0.2);
-            border: 2px solid #8b5cf6;
             color: #fff;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s;
-            transform-style: preserve-3d;
+            font-size: 13px;
+            font-weight: 500;
+            pointer-events: none;
         }
 
-        .cta-button:hover {
-            background: #8b5cf6;
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+        .window-content {
+            flex: 1;
+            overflow: auto;
+            color: #fff;
         }
 
-        /* Section Styles */
-        section {
-            padding: 5rem 5%;
-            position: relative;
+        #finder-content {
+            display: flex;
+            height: 100%;
+            background: #1e1e1e;
         }
 
-        .section-title {
-            font-size: clamp(2rem, 5vw, 3rem);
-            text-align: center;
-            margin-bottom: 3rem;
-            font-weight: 300;
+        .finder-sidebar {
+            width: 180px;
+            background: #2b2b2b;
+            padding: 15px 10px;
+            border-right: 1px solid #1a1a1a;
         }
 
-        /* About Section */
-        .about-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            align-items: center;
+        .finder-section h4 {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding: 0 8px;
         }
 
-        .profile-image {
-            width: 100%;
-            max-width: 350px;
-            border-radius: 20px;
-            overflow: hidden;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.3));
+        .finder-item {
+            padding: 6px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            border: 3px solid rgba(139, 92, 246, 0.5);
-            transition: all 0.4s;
-            transform-style: preserve-3d;
+            gap: 8px;
+            transition: background 0.2s;
+            margin-bottom: 4px;
         }
 
-        .profile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+        .finder-item:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        .profile-image i {
-            font-size: 8rem;
+        .finder-item.active {
+            background: rgba(0, 122, 255, 0.6);
+        }
+
+        .finder-main {
+            flex: 1;
+            padding: 20px;
+            overflow: auto;
+            background: #1e1e1e;
+        }
+
+        .finder-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .finder-search {
+            flex: 1;
+            max-width: 300px;
+            padding: 6px 12px;
+            background: rgba(60, 60, 65, 0.6);
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .finder-search::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
 
-        
-        .about-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            opacity: 0.9;
-        }
-
-        .about-text h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: #8b5cf6;
-        }
-
-        /* Skills Section */
-        .skills-grid {
-            max-width: 1000px;
-            margin: 0 auto;
+        .finder-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 20px;
         }
 
-        .skill-card {
-            background: rgba(139, 92, 246, 0.1);
-            border: 2px solid rgba(139, 92, 246, 0.3);
-            border-radius: 20px;
-            padding: 2rem 1rem;
-            text-align: center;
-            transition: all 0.4s;
-            transform-style: preserve-3d;
-        }
-
-        .skill-card:hover {
-            background: rgba(139, 92, 246, 0.2);
-            transform: translateY(-10px) rotateY(5deg);
-            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
-            border-color: #8b5cf6;
-        }
-
-        .skill-card img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            margin-bottom: 1rem;
-        }
-
-        .skill-card h4 {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        /* Projects Section */
-        .projects-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background: rgba(139, 92, 246, 0.1);
-            border: 2px solid rgba(139, 92, 246, 0.3);
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.4s;
-            transform-style: preserve-3d;
-        }
-
-        .project-card:hover {
-            background: rgba(139, 92, 246, 0.2);
-            transform: translateY(-10px) rotateX(2deg);
-            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.4);
-            border-color: #8b5cf6;
-        }
-
-        .project-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #8b5cf6;
-        }
-
-        .project-card p {
-            opacity: 0.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .project-link {
-            display: inline-block;
-            padding: 0.7rem 1.5rem;
-            background: rgba(139, 92, 246, 0.3);
-            border: 1px solid #8b5cf6;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 25px;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .project-link:hover {
-            background: #8b5cf6;
-            transform: scale(1.05);
-        }
-
-        /* Contact Section */
-        .contact-container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .contact-item {
+        .finder-folder {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
-            padding: 1.5rem;
-            background: rgba(139, 92, 246, 0.1);
-            border: 2px solid rgba(139, 92, 246, 0.3);
-            border-radius: 15px;
-            transition: all 0.3s;
-            min-width: 200px;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .contact-item:hover {
-            background: rgba(139, 92, 246, 0.2);
-            transform: translateY(-5px);
-            border-color: #8b5cf6;
+        .finder-folder:hover {
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .contact-item i {
-            font-size: 2rem;
-            color: #8b5cf6;
+        .folder-icon {
+            font-size: 48px;
+            margin-bottom: 8px;
         }
 
-        .social-links {
+        .folder-name {
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .safari-toolbar {
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 3rem;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #2b2b2b;
+            border-bottom: 1px solid #1a1a1a;
         }
 
-        .social-links a {
-            width: 50px;
-            height: 50px;
+        .safari-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(60, 60, 65, 0.6);
+            border: none;
+            color: #fff;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(139, 92, 246, 0.2);
-            border: 2px solid rgba(139, 92, 246, 0.5);
-            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .safari-btn:hover {
+            background: rgba(80, 80, 85, 0.8);
+        }
+
+        .safari-url {
+            flex: 1;
+            padding: 6px 12px;
+            background: rgba(60, 60, 65, 0.6);
+            border: none;
+            border-radius: 8px;
             color: #fff;
-            font-size: 1.5rem;
-            transition: all 0.3s;
+            font-size: 13px;
         }
 
-        .social-links a:hover {
-            background: #8b5cf6;
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.5);
+        .safari-frame {
+            width: 100%;
+            height: calc(100% - 48px);
+            border: none;
+            background: #1e1e1e;
         }
 
-        /* Footer */
-        footer {
+        #calculator-content {
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            background: #1e1e1e;
+            gap: 0;
+            height: 100%;
+        }
+
+        .calc-display {
+            background: #1e1e1e;
+            padding: 20px 15px 10px 15px;
+            text-align: right;
+            font-size: 64px;
+            font-weight: 200;
+            min-height: 100px;
+            max-height: 100px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            color: #fff;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 4px;
+            flex: 1;
+        }
+
+        .calc-btn {
+            width: 100%;
+            height: 100%;
+            max-height: 70px;
+            font-size: 28px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.1s;
+            font-weight: 400;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .calc-btn.num {
+            background: #505050;
+        }
+
+        .calc-btn.op {
+            background: #ff9f0a;
+            font-size: 36px;
+        }
+
+        .calc-btn.func {
+            background: #a5a5a5;
+            color: #000;
+            font-size: 26px;
+        }
+
+        .calc-btn:active {
+            filter: brightness(1.4);
+            transform: scale(0.95);
+        }
+
+        .calc-btn.zero {
+            grid-column: span 2;
+            border-radius: 35px;
+            justify-content: flex-start;
+            padding-left: 28px;
+        }
+
+        #settings-content {
+            display: flex;
+            height: 100%;
+            background: #1e1e1e;
+        }
+
+        .settings-sidebar {
+            width: 200px;
+            background: #2b2b2b;
+            padding: 20px 10px;
+            border-right: 1px solid #1a1a1a;
+        }
+
+        .settings-item {
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-bottom: 5px;
+            transition: background 0.2s;
+        }
+
+        .settings-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .settings-item.active {
+            background: rgba(0, 122, 255, 0.6);
+        }
+
+        .settings-main {
+            flex: 1;
+            padding: 30px;
+            overflow: auto;
+            background: #1e1e1e;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+        }
+
+        .settings-section h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .wallpaper-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .wallpaper-item {
+            aspect-ratio: 16/10;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            background: #2b2b2b;
+        }
+
+        .wallpaper-item:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .wallpaper-item.active {
+            border-color: rgba(0, 122, 255, 1);
+        }
+
+        .wallpaper-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .wallpaper-label {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 6px;
+            border-radius: 4px;
+            font-size: 11px;
             text-align: center;
-            padding: 2rem;
-            border-top: 1px solid rgba(139, 92, 246, 0.3);
-            opacity: 0.7;
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
+        #terminal-content {
+            background: #1e1e1e;
+            padding: 20px;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .terminal-output {
+            color: #0f0;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .terminal-input-line {
+            display: flex;
+            align-items: center;
+            color: #0f0;
+        }
+
+        .terminal-prompt {
+            margin-right: 8px;
+        }
+
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #0f0;
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
+        }
+
+        #dock {
+            position: fixed;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(40, 40, 45, 0.7);
+            backdrop-filter: blur(40px);
+            padding: 8px 12px;
+            border-radius: 18px;
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            z-index: 10000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dock-item {
+            width: 52px;
+            height: 52px;
+            background: rgba(60, 60, 65, 0.8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            font-size: 28px;
+        }
+
+        .dock-item:hover {
+            transform: translateY(-12px) scale(1.2);
+        }
+
+        .dock-item.minimized::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+        }
+
+        @keyframes genie {
+            0% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: scale(1) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.1) translateY(400px);
             }
         }
 
-        /* Responsive */
+        .window.minimizing {
+            animation: genie 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         @media (max-width: 768px) {
-            .menu-toggle {
-                display: flex;
+            #desktop-widget {
+                width: 280px;
+                right: 10px;
+                top: 40px;
             }
 
-            nav ul {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                flex-direction: column;
-                background: rgba(26, 26, 46, 0.98);
-                padding: 2rem;
-                gap: 1rem;
-                transition: left 0.3s;
-            }
-
-            nav ul.active {
-                left: 0;
-            }
-
-            .about-container {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .profile-image {
-                margin: 0 auto;
-            }
-
-            .skills-grid {
-                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-                gap: 1rem;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-
-            section {
-                padding: 3rem 5%;
+            .window {
+                min-width: 90vw;
+                width: 90vw !important;
+                left: 5vw !important;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Animated background canvas -->
-    <canvas id="particles-canvas"></canvas>
-
-    <!-- Header -->
-    <header id="header">
-        <div class="logo">DC</div>
-        <nav>
-            <ul id="nav-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-        <div class="menu-toggle" id="menu-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
+    <div id="desktop">
+        <div id="menubar">
+            <div class="menu-item" id="apple-logo" onclick="toggleAppleMenu()">
+                <svg width="16" height="16" viewBox="0 0 814 1000" fill="white">
+                    <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57-155.5-127C46.7 790.7 0 663 0 541.8c0-194.4 126.4-297.5 250.8-297.5 66.1 0 121.2 43.4 162.7 43.4 39.5 0 101.1-46 176.3-46 28.5 0 130.9 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z"/>
+                </svg>
+            </div>
+            <div class="menu-item" onclick="openApp('finder')">Finder</div>
+            <div class="menu-item" onclick="alert('File menu')">File</div>
+            <div class="menu-item" onclick="alert('Edit menu')">Edit</div>
+            <div class="menu-item" onclick="alert('View menu')">View</div>
+            <div class="menu-item" onclick="alert('Go menu')">Go</div>
+            <div class="menu-item" onclick="alert('Window menu')">Window</div>
+            <div class="menu-item" onclick="alert('Help menu')">Help</div>
+            <div id="menu-right">
+                <div class="menu-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                        <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+                    </svg>
+                </div>
+                <div class="menu-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                        <path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/>
+                    </svg>
+                    <span style="margin-left: 4px;">100%</span>
+                </div>
+                <div id="menu-time"></div>
+            </div>
         </div>
-    </header>
 
-    <div class="content">
-        <!-- Hero Section -->
-        <section class="hero" id="home">
-            <div class="hero-content">
-                <h1><b></b>Devpratap Chauhan</b></h1>
-                <p class="tagline">College Student | Developer</p>
-                <a href="#projects" class="cta-button">View My Work</a>
+        <div id="desktop-widget">
+            <div id="widget-time"></div>
+            <div id="widget-date"></div>
+            <div class="widget-section">
+                <h3>PORTFOLIO</h3>
+                <p><strong>John Doe</strong><br>Full Stack Developer<br>Passionate about creating amazing web experiences</p>
             </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-container">
-                <div class="profile-image">
-                    <img src="dev.png" alt="Dev Pratap Chauhan">
-                </div>
-                <div class="about-text">
-                    <h3>Dev Pratap Chauhan</h3>
-                    <p>Hello! I'm Dev Pratap Chauhan, a passionate college student pursuing my dreams in technology and software development. I believe in creating simple yet impactful solutions that make a difference.</p>
-                    <p>Currently exploring the vast world of web development, mobile applications, and software engineering. I love learning new technologies and building projects that solve real-world problems.</p>
-                    <p>My journey in tech is driven by curiosity and a desire to create meaningful digital experiences. When I'm not coding, you can find me exploring new frameworks, contributing to open source, or brainstorming the next big idea.</p>
-                </div>
+            <div class="widget-section">
+                <h3>SKILLS</h3>
+                <p>React • Node.js • Python • UI/UX Design</p>
             </div>
-        </section>
+        </div>
 
-        <!-- Skills Section -->
-        <section id="skills">
-            <h2 class="section-title">Skills & Technologies</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
-                    <h4>HTML5</h4>
+        <div class="window" id="finder-window" style="width: 900px; height: 600px; top: 80px; left: 100px;">
+            <div class="window-header">
+                <div class="window-controls">
+                    <div class="window-control close" onclick="closeWindow('finder-window')"></div>
+                    <div class="window-control minimize" onclick="minimizeWindow('finder-window')"></div>
+                    <div class="window-control maximize" onclick="maximizeWindow('finder-window')"></div>
                 </div>
-                <div class="skill-card">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3">
-                    <h4>CSS3</h4>
-                </div>
-                <div class="skill-card">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
-                    <h4>JavaScript</h4>
-                </div>
-                <div class="skill-card">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C">
-                    <h4>C</h4>
-                </div>
-                <div class="skill-card">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
-                    <h4>Python</h4>
-                </div>
-                <div class="skill-card">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
-                    <h4>Java</h4>
-                </div>
-                <div class="skill-card">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kotlin/kotlin-original.svg" alt="Kotlin">
-                    <h4>Kotlin</h4>
-                </div>
+                <div class="window-title">Finder</div>
             </div>
-        </section>
-
-        <!-- Projects Section -->
-        <section id="projects">
-            <h2 class="section-title">Featured Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3>NearChat APK</h3>
-                    <p>A proximity-based chat application that connects people nearby. Built with modern web technologies for seamless real-time communication.</p>
-                    <a href="https://nearchatapk.github.io" target="_blank" class="project-link">
-                        <i class="fas fa-external-link-alt"></i> View Project
-                    </a>
-                </div>
-                <div class="project-card">
-                    <h3>MIET Connect</h3>
-                    <p>A comprehensive platform designed for college connectivity and information sharing, making campus life easier for students.</p>
-                    <a href="https://mietc.github.io" target="_blank" class="project-link">
-                        <i class="fas fa-external-link-alt"></i> View Project
-                    </a>
-                </div>
-                <div class="project-card">
-                    <h3>Portfolio Website</h3>
-                    <p>A modern, responsive portfolio showcasing my work with beautiful 3D effects and smooth animations. Built with pure HTML, CSS, and JavaScript.</p>
-                    <a href="#home" class="project-link">
-                        <i class="fas fa-home"></i> You're Here!
-                    </a>
-                </div>
-                <div class="project-card">
-                    <h3>Coming Soon...</h3>
-                    <p>Exciting new projects are in development. Stay tuned for innovative solutions and creative implementations!</p>
-                    <a href="#contact" class="project-link">
-                        <i class="fas fa-envelope"></i> Get Notified
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-container">
-                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
-                    I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
-                </p>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <h4>Email</h4>
-                        <p>dev.chauhan@email.com</p>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <h4>Location</h4>
-                        <p>Meerut, UP, India</p>
+            <div class="window-content" id="finder-content">
+                <div class="finder-sidebar">
+                    <div class="finder-section">
+                        <h4>Favorites</h4>
+                        <div class="finder-item active">📁 Portfolio</div>
+                        <div class="finder-item">📁 Projects</div>
+                        <div class="finder-item">📄 Documents</div>
+                        <div class="finder-item">⬇️ Downloads</div>
                     </div>
                 </div>
-                <div class="social-links">
-                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <div class="finder-main">
+                    <div class="finder-toolbar">
+                        <input type="text" class="finder-search" placeholder="Search Portfolio" id="finder-search">
+                    </div>
+                    <div class="finder-grid">
+                        <div class="finder-folder">
+                            <div class="folder-icon">📋</div>
+                            <div class="folder-name">About Me</div>
+                        </div>
+                        <div class="finder-folder">
+                            <div class="folder-icon">💼</div>
+                            <div class="folder-name">My Projects</div>
+                        </div>
+                        <div class="finder-folder">
+                            <div class="folder-icon">📄</div>
+                            <div class="folder-name">Resume</div>
+                        </div>
+                        <div class="finder-folder">
+                            <div class="folder-icon">📧</div>
+                            <div class="folder-name">Contact</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+
+        <div class="window" id="safari-window" style="width: 1000px; height: 700px; top: 100px; left: 150px;">
+            <div class="window-header">
+                <div class="window-controls">
+                    <div class="window-control close" onclick="closeWindow('safari-window')"></div>
+                    <div class="window-control minimize" onclick="minimizeWindow('safari-window')"></div>
+                    <div class="window-control maximize" onclick="maximizeWindow('safari-window')"></div>
+                </div>
+                <div class="window-title">Safari</div>
+            </div>
+            <div class="window-content">
+                <div class="safari-toolbar">
+                    <button class="safari-btn">◀</button>
+                    <button class="safari-btn">▶</button>
+                    <input type="text" class="safari-url" id="safari-url" placeholder="Search or enter website name" value="https://github.com">
+                    <button class="safari-btn" id="safari-go">Go</button>
+                </div>
+                <iframe class="safari-frame" id="safari-frame" src="about:blank"></iframe>
+            </div>
+        </div>
+
+        <div class="window" id="calculator-window" style="width: 320px; height: 520px; top: 120px; left: 200px;">
+            <div class="window-header">
+                <div class="window-controls">
+                    <div class="window-control close" onclick="closeWindow('calculator-window')"></div>
+                    <div class="window-control minimize" onclick="minimizeWindow('calculator-window')"></div>
+                    <div class="window-control maximize" onclick="maximizeWindow('calculator-window')"></div>
+                </div>
+                <div class="window-title"></div>
+            </div>
+            <div class="window-content" id="calculator-content">
+                <div class="calc-display" id="calc-display">0</div>
+                <div class="calc-buttons">
+                    <button class="calc-btn func" onclick="clearCalc()">AC</button>
+                    <button class="calc-btn func" onclick="toggleSign()">+/-</button>
+                    <button class="calc-btn func" onclick="inputPercent()">%</button>
+                    <button class="calc-btn op" onclick="inputOp('/')">÷</button>
+                    <button class="calc-btn num" onclick="inputNum('7')">7</button>
+                    <button class="calc-btn num" onclick="inputNum('8')">8</button>
+                    <button class="calc-btn num" onclick="inputNum('9')">9</button>
+                    <button class="calc-btn op" onclick="inputOp('*')">×</button>
+                    <button class="calc-btn num" onclick="inputNum('4')">4</button>
+                    <button class="calc-btn num" onclick="inputNum('5')">5</button>
+                    <button class="calc-btn num" onclick="inputNum('6')">6</button>
+                    <button class="calc-btn op" onclick="inputOp('-')">−</button>
+                    <button class="calc-btn num" onclick="inputNum('1')">1</button>
+                    <button class="calc-btn num" onclick="inputNum('2')">2</button>
+                    <button class="calc-btn num" onclick="inputNum('3')">3</button>
+                    <button class="calc-btn op" onclick="inputOp('+')">+</button>
+                    <button class="calc-btn num zero" onclick="inputNum('0')">0</button>
+                    <button class="calc-btn num" onclick="inputNum('.')">.</button>
+                    <button class="calc-btn op" onclick="inputEquals()">=</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="settings-window" style="width: 800px; height: 600px; top: 140px; left: 250px;">
+            <div class="window-header">
+                <div class="window-controls">
+                    <div class="window-control close" onclick="closeWindow('settings-window')"></div>
+                    <div class="window-control minimize" onclick="minimizeWindow('settings-window')"></div>
+                    <div class="window-control maximize" onclick="maximizeWindow('settings-window')"></div>
+                </div>
+                <div class="window-title">System Settings</div>
+            </div>
+            <div class="window-content" id="settings-content">
+                <div class="settings-sidebar">
+                    <div class="settings-item active">🎨 Appearance</div>
+                    <div class="settings-item">🖼️ Wallpaper</div>
+                </div>
+                <div class="settings-main">
+                    <div class="settings-section">
+                        <h3>Desktop & Screen Saver</h3>
+                        <p style="margin-bottom: 20px; opacity: 0.7;">Choose your desktop wallpaper</p>
+                        <div class="wallpaper-grid" id="wallpaper-grid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="terminal-window" style="width: 700px; height: 500px; top: 160px; left: 300px;">
+            <div class="window-header">
+                <div class="window-controls">
+                    <div class="window-control close" onclick="closeWindow('terminal-window')"></div>
+                    <div class="window-control minimize" onclick="minimizeWindow('terminal-window')"></div>
+                    <div class="window-control maximize" onclick="maximizeWindow('terminal-window')"></div>
+                </div>
+                <div class="window-title">Terminal</div>
+            </div>
+            <div class="window-content" id="terminal-content">
+                <div id="terminal-output">
+                    <div class="terminal-output">Last login: Sun Oct 5 2025</div>
+                    <div class="terminal-output">macOS Portfolio Terminal v1.0</div>
+                    <div class="terminal-output">Type 'help' for available commands</div>
+                </div>
+                <div class="terminal-input-line">
+                    <span class="terminal-prompt">user@macOS ~ %</span>
+                    <input type="text" class="terminal-input" id="terminal-input" autocomplete="off">
+                </div>
+            </div>
+        </div>
+
+        <div id="dock">
+            <div class="dock-item" data-app="finder" title="Finder">📁</div>
+            <div class="dock-item" data-app="safari" title="Safari">🧭</div>
+            <div class="dock-item" data-app="calculator" title="Calculator">🔢</div>
+            <div class="dock-item" data-app="settings" title="Settings">⚙️</div>
+            <div class="dock-item" data-app="terminal" title="Terminal">⌨️</div>
+        </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Dev Pratap Chauhan. All rights reserved. | Made with <i class="fas fa-heart" style="color: #8b5cf6;"></i></p>
-    </footer>
-
     <script>
-        // Particle animation with connected lines
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const particles = [];
-        const particleCount = 80;
-        const connectionDistance = 150;
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.radius = Math.random() * 2 + 1;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(139, 92, 246, 0.6)';
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-
-        function connectParticles() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < connectionDistance) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(139, 92, 246, ${1 - distance / connectionDistance})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            
-            connectParticles();
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // Header scroll effect
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const navMenu = document.getElementById('nav-menu');
-
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-
-        // Close menu on link click
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-            });
-        });
-
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // Add scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
+        const state = {
+            currentWallpaper: 0,
+            calcValue: '0',
+            calcOperator: null,
+            calcPrevValue: null,
+            calcWaitingForOperand: false,
+            minimizedWindows: {}
         };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+        const wallpapers = ['wallpaper1.png', 'wallpaper2.png', 'wallpaper3.png', 'wallpaper4.png', 'wallpaper5.png'];
+
+        function init() {
+            updateTime();
+            setInterval(updateTime, 1000);
+            loadWallpapers();
+            setWallpaper(0);
+            initDock();
+            initWindows();
+            initSafari();
+            initTerminal();
+            initFinder();
+            initWidget();
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            const dateStr = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            const fullDateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('menu-time').textContent = `${dateStr} ${timeStr}`;
+            document.getElementById('widget-time').textContent = timeStr;
+            document.getElementById('widget-date').textContent = fullDateStr;
+        }
+
+        function loadWallpapers() {
+            const grid = document.getElementById('wallpaper-grid');
+            grid.innerHTML = '';
+            wallpapers.forEach((wallpaper, index) => {
+                const item = document.createElement('div');
+                item.className = 'wallpaper-item' + (index === state.currentWallpaper ? ' active' : '');
+                item.onclick = () => setWallpaper(index);
+                const img = document.createElement('img');
+                img.src = wallpaper;
+                img.alt = `Wallpaper ${index + 1}`;
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    const fallback = document.createElement('div');
+                    fallback.style.cssText = `width:100%;height:100%;background:linear-gradient(135deg, hsl(${index * 72}, 70%, 50%), hsl(${index * 72 + 60}, 60%, 40%))`;
+                    this.parentElement.appendChild(fallback);
+                };
+                item.appendChild(img);
+                const label = document.createElement('div');
+                label.className = 'wallpaper-label';
+                label.textContent = `Wallpaper ${index + 1}`;
+                item.appendChild(label);
+                grid.appendChild(item);
+            });
+        }
+
+        function setWallpaper(index) {
+            state.currentWallpaper = index;
+            const desktop = document.getElementById('desktop');
+            const img = new Image();
+            img.src = wallpapers[index];
+            img.onload = function() {
+                desktop.style.backgroundImage = `url('${wallpapers[index]}')`;
+            };
+            img.onerror = function() {
+                desktop.style.background = `linear-gradient(135deg, hsl(${index * 72}, 70%, 50%), hsl(${index * 72 + 60}, 60%, 40%))`;
+                desktop.style.backgroundImage = '';
+            };
+            document.querySelectorAll('.wallpaper-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+        }
+
+        function openApp(app) {
+            const windowId = `${app}-window`;
+            const window = document.getElementById(windowId);
+            if (state.minimizedWindows[windowId]) {
+                window.classList.remove('minimizing');
+                window.classList.add('active');
+                state.minimizedWindows[windowId] = false;
+                updateDockIndicators();
+                bringToFront(window);
+            } else if (window.classList.contains('active')) {
+                bringToFront(window);
+            } else {
+                window.classList.add('active');
+                bringToFront(window);
+            }
+        }
+
+        function toggleAppleMenu() {
+            alert('🍎 Apple Menu\n\nAbout This Mac\nSystem Settings...\nApp Store...\nRecent Items\n---\nForce Quit...\nSleep\nRestart...\nShut Down...');
+        }
+
+        function initDock() {
+            document.querySelectorAll('.dock-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    openApp(item.dataset.app);
+                });
+            });
+        }
+
+        function initWindows() {
+            document.querySelectorAll('.window').forEach(makeWindowDraggable);
+        }
+
+        function closeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            window.classList.remove('active');
+            state.minimizedWindows[windowId] = false;
+            updateDockIndicators();
+        }
+
+        function minimizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            window.classList.add('minimizing');
+            setTimeout(() => {
+                window.classList.remove('active');
+                window.classList.remove('minimizing');
+                state.minimizedWindows[windowId] = true;
+                updateDockIndicators();
+            }, 500);
+        }
+
+        function maximizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            const isMaximized = window.dataset.maximized === 'true';
+            if (isMaximized) {
+                window.style.width = window.dataset.origWidth;
+                window.style.height = window.dataset.origHeight;
+                window.style.top = window.dataset.origTop;
+                window.style.left = window.dataset.origLeft;
+                window.dataset.maximized = 'false';
+            } else {
+                window.dataset.origWidth = window.style.width;
+                window.dataset.origHeight = window.style.height;
+                window.dataset.origTop = window.style.top;
+                window.dataset.origLeft = window.style.left;
+                window.style.width = '100vw';
+                window.style.height = 'calc(100vh - 32px)';
+                window.style.top = '24px';
+                window.style.left = '0';
+                window.dataset.maximized = 'true';
+            }
+        }
+
+        function updateDockIndicators() {
+            document.querySelectorAll('.dock-item').forEach(item => {
+                const app = item.dataset.app;
+                const windowId = `${app}-window`;
+                item.classList.toggle('minimized', state.minimizedWindows[windowId] === true);
+            });
+        }
+
+        function bringToFront(window) {
+            document.querySelectorAll('.window').forEach(w => {
+                w.style.zIndex = '1000';
+            });
+            window.style.zIndex = '1001';
+        }
+
+        function makeWindowDraggable(window) {
+            const header = window.querySelector('.window-header');
+            let isDragging = false;
+            let currentX, currentY, initialX, initialY;
+            header.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+            function dragStart(e) {
+                if (e.target.classList.contains('window-control')) return;
+                initialX = e.clientX - window.offsetLeft;
+                initialY = e.clientY - window.offsetTop;
+                isDragging = true;
+                bringToFront(window);
+            }
+            function drag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                window.style.left = currentX + 'px';
+                window.style.top = Math.max(24, currentY) + 'px';
+            }
+            function dragEnd() {
+                isDragging = false;
+            }
+        }
+
+        function inputNum(num) {
+            if (state.calcWaitingForOperand) {
+                state.calcValue = num;
+                state.calcWaitingForOperand = false;
+            } else {
+                state.calcValue = state.calcValue === '0' ? num : state.calcValue + num;
+            }
+            updateDisplay();
+        }
+
+        function inputOp(op) {
+            const inputValue = parseFloat(state.calcValue);
+            if (state.calcPrevValue === null) {
+                state.calcPrevValue = inputValue;
+            } else if (state.calcOperator) {
+                const result = calculate(state.calcPrevValue, inputValue, state.calcOperator);
+                state.calcValue = String(result);
+                state.calcPrevValue = result;
+            }
+            state.calcWaitingForOperand = true;
+            state.calcOperator = op;
+            updateDisplay();
+        }
+
+        function inputEquals() {
+            const inputValue = parseFloat(state.calcValue);
+            if (state.calcPrevValue !== null && state.calcOperator) {
+                const result = calculate(state.calcPrevValue, inputValue, state.calcOperator);
+                state.calcValue = String(result);
+                state.calcPrevValue = null;
+                state.calcOperator = null;
+                state.calcWaitingForOperand = true;
+                updateDisplay();
+            }
+        }
+
+        function clearCalc() {
+            state.calcValue = '0';
+            state.calcPrevValue = null;
+            state.calcOperator = null;
+            state.calcWaitingForOperand = false;
+            updateDisplay();
+        }
+
+        function toggleSign() {
+            state.calcValue = String(parseFloat(state.calcValue) * -1);
+            updateDisplay();
+        }
+
+        function inputPercent() {
+            state.calcValue = String(parseFloat(state.calcValue) / 100);
+            updateDisplay();
+        }
+
+        function calculate(a, b, op) {
+            switch (op) {
+                case '+': return a + b;
+                case '-': return a - b;
+                case '*': return a * b;
+                case '/': return a / b;
+                default: return b;
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('calc-display').textContent = state.calcValue;
+        }
+
+        function initSafari() {
+            const urlInput = document.getElementById('safari-url');
+            const goBtn = document.getElementById('safari-go');
+            const frame = document.getElementById('safari-frame');
+            function loadURL() {
+                let url = urlInput.value.trim();
+                if (url && !url.startsWith('http')) {
+                    url = 'https://' + url;
+                }
+                frame.src = url;
+            }
+            goBtn.addEventListener('click', loadURL);
+            urlInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') loadURL();
+            });
+        }
+
+        function initTerminal() {
+            const input = document.getElementById('terminal-input');
+            const output = document.getElementById('terminal-output');
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const command = input.value.trim();
+                    if (command) {
+                        executeCommand(command);
+                    }
+                    input.value = '';
                 }
             });
-        }, observerOptions);
+            function executeCommand(cmd) {
+                const line = document.createElement('div');
+                line.className = 'terminal-output';
+                line.textContent = `user@macOS ~ % ${cmd}`;
+                output.appendChild(line);
+                const response = document.createElement('div');
+                response.className = 'terminal-output';
+                const command = cmd.split(' ')[0].toLowerCase();
+                switch (command) {
+                    case 'help':
+                        response.textContent = 'Available commands: help, clear, date, whoami, ls, portfolio, contact';
+                        break;
+                    case 'clear':
+                        output.innerHTML = '';
+                        return;
+                    case 'date':
+                        response.textContent = new Date().toString();
+                        break;
+                    case 'whoami':
+                        response.textContent = 'user - Full Stack Developer';
+                        break;
+                    case 'ls':
+                        response.textContent = 'Portfolio  Projects  Resume  Contact';
+                        break;
+                    case 'portfolio':
+                        response.textContent = 'Opening portfolio in Finder...';
+                        setTimeout(() => openApp('finder'), 500);
+                        break;
+                    case 'contact':
+                        response.textContent = 'Email: contact@example.com | GitHub: github.com/user';
+                        break;
+                    default:
+                        response.textContent = `Command not found: ${command}. Type 'help' for available commands.`;
+                }
+                output.appendChild(response);
+                output.parentElement.scrollTop = output.parentElement.scrollHeight;
+            }
+        }
 
-        document.querySelectorAll('.skill-card, .project-card, .contact-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.6s ease';
-            observer.observe(el);
-        });
+        function initFinder() {
+            const searchInput = document.getElementById('finder-search');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                document.querySelectorAll('.finder-folder').forEach(folder => {
+                    const name = folder.querySelector('.folder-name').textContent.toLowerCase();
+                    folder.style.display = name.includes(query) ? 'flex' : 'none';
+                });
+            });
+            document.querySelectorAll('.finder-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.finder-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+            document.querySelectorAll('.finder-folder').forEach(folder => {
+                folder.addEventListener('dblclick', () => {
+                    alert(`Opening: ${folder.querySelector('.folder-name').textContent}`);
+                });
+            });
+        }
+
+        function initWidget() {
+            const widget = document.getElementById('desktop-widget');
+            let isDragging = false;
+            let currentX, currentY, initialX, initialY;
+            widget.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+            function dragStart(e) {
+                initialX = e.clientX - widget.offsetLeft;
+                initialY = e.clientY - widget.offsetTop;
+                isDragging = true;
+            }
+            function drag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                const maxX = window.innerWidth - widget.offsetWidth;
+                const maxY = window.innerHeight - widget.offsetHeight - 80;
+                currentX = Math.max(0, Math.min(currentX, maxX));
+                currentY = Math.max(24, Math.min(currentY, maxY));
+                widget.style.left = currentX + 'px';
+                widget.style.top = currentY + 'px';
+                widget.style.right = 'auto';
+            }
+            function dragEnd() {
+                isDragging = false;
+            }
+        }
+
+        init();
     </script>
 </body>
 </html>
