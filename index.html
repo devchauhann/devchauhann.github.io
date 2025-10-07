@@ -1,1334 +1,3334 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="icon" type="image/png" href="website.png" />
     <title>Portfolio</title>
-    <link rel="icon" type="image/png" href="dev.png" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            background: #000;
-        }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+          "Segoe UI", "Helvetica Neue", Helvetica sans-serif;
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+        background: #000;
+      }
 
-        #desktop {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
+      /* === LOCK SCREEN === */
+      #lockscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 80px 0 100px 0;
+        z-index: 99999;
+        color: #fff;
+      }
 
-        #menubar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 24px;
-            background: rgba(40, 40, 45, 0.85);
-            backdrop-filter: blur(20px);
-            display: flex;
-            align-items: center;
-            padding: 0 12px;
-            z-index: 9999;
-            color: #fff;
-            font-size: 13px;
-            border-bottom: 0.5px solid rgba(0, 0, 0, 0.3);
-        }
+      #lockscreen.hidden {
+        display: none;
+      }
 
-        .menu-item {
-            padding: 0 10px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+      .lock-top {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
 
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
+      .lock-time {
+        font-size: 128px;
+        font-weight: 600;
+        color: #a8a8a8;
+        letter-spacing: -4px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8),
+          inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      }
 
-        #apple-logo {
-            padding: 0 8px;
-        }
+      .lock-date {
+        font-size: 28px;
+        font-weight: 400;
+        color: #cccccc;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        margin-bottom: 10px;
+      }
 
-        #menu-right {
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+      .lock-user {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
 
-        #menu-time {
-            font-size: 12px;
-            font-weight: 500;
-        }
+      .lock-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+      }
 
+      .lock-password {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: #fff;
+        font-size: 14px;
+        width: 250px;
+        text-align: center;
+        outline: none;
+      }
+
+      .lock-password::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .lock-hint {
+        font-size: 13px;
+        opacity: 0.7;
+      }
+
+      /* === DESKTOP === */
+      #desktop {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      #desktop {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      #menubar {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        right: 8px;
+        height: 32px;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        padding: 0 8px;
+        z-index: 9999;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .menu-item {
+        padding: 6px 12px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-radius: 6px;
+        font-weight: 500;
+        gap: 6px;
+      }
+
+      .menu-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 6px;
+      }
+
+      .menu-item:active {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+      }
+
+      #apple-logo {
+        padding: 6px 8px;
+        margin-right: 4px;
+      }
+
+      #apple-logo svg {
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+      }
+
+      #menu-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .menu-status-item {
+        padding: 6px 8px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        gap: 4px;
+      }
+
+      .menu-status-item:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .menu-status-item svg {
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+      }
+
+      #menu-time {
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      /* === CONTROL CENTER === */
+      #control-center {
+        position: fixed;
+        top: 30px;
+        right: -400px;
+        width: 380px;
+        background: rgba(40, 40, 45, 0.85);
+        backdrop-filter: blur(40px);
+        border-radius: 18px;
+        padding: 20px;
+        z-index: 99998;
+        transition: right 0.3s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      }
+
+      #control-center.active {
+        right: 10px;
+      }
+
+      .cc-section {
+        margin-bottom: 15px;
+      }
+
+      .cc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .cc-item {
+        background: rgba(60, 60, 65, 0.6);
+        border-radius: 12px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .cc-item:hover {
+        background: rgba(80, 80, 85, 0.7);
+      }
+
+      .cc-item.active {
+        background: rgba(0, 122, 255, 0.7);
+      }
+
+      .cc-icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      .cc-label {
+        font-size: 12px;
+        color: #fff;
+        font-weight: 500;
+      }
+
+      .cc-slider {
+        background: rgba(60, 60, 65, 0.6);
+        border-radius: 12px;
+        padding: 15px;
+      }
+
+      .cc-slider-label {
+        font-size: 12px;
+        color: #fff;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .slider {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.3);
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+      }
+
+      .slider::-webkit-slider-thumb {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+      }
+      /* === APPLE MENU === */
+      #apple-menu {
+        position: fixed;
+        top: 28px;
+        left: 10px;
+        width: 280px;
+        background: rgba(40, 40, 45, 0.95);
+        backdrop-filter: blur(40px);
+        border-radius: 8px;
+        padding: 8px;
+        z-index: 99998;
+        display: none;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      }
+
+      #apple-menu.active {
+        display: block;
+      }
+
+      .apple-menu-item {
+        padding: 8px 12px;
+        color: #fff;
+        font-size: 13px;
+        cursor: pointer;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .apple-menu-item:hover {
+        background: rgba(0, 122, 255, 0.6);
+      }
+
+      .apple-menu-divider {
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 4px 0;
+      }
+
+      /* === SHUTDOWN MODAL === */
+      #shutdown-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+      }
+
+      #shutdown-modal.active {
+        display: flex;
+      }
+
+      .shutdown-dialog {
+        background: rgba(40, 40, 45, 0.95);
+        backdrop-filter: blur(40px);
+        border-radius: 12px;
+        padding: 30px;
+        width: 400px;
+        text-align: center;
+        color: #fff;
+      }
+
+      .shutdown-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+      }
+
+      .shutdown-title {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+
+      .shutdown-text {
+        font-size: 13px;
+        opacity: 0.7;
+        margin-bottom: 25px;
+      }
+
+      .shutdown-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .shutdown-btn {
+        padding: 10px 30px;
+        border-radius: 6px;
+        border: none;
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .shutdown-btn.cancel {
+        background: rgba(60, 60, 65, 0.6);
+        color: #fff;
+      }
+
+      .shutdown-btn.confirm {
+        background: rgba(0, 122, 255, 0.8);
+        color: #fff;
+      }
+
+      /* === DESKTOP WIDGET === */
+      #desktop-widget {
+        position: absolute;
+        top: 50px;
+        right: 20px;
+        width: 320px;
+        background: rgba(40, 40, 45, 0.75);
+        backdrop-filter: blur(40px);
+        border-radius: 18px;
+        padding: 20px;
+        color: #fff;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        cursor: move;
+        user-select: none;
+      }
+
+      #widget-time {
+        font-size: 48px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      #widget-date {
+        font-size: 16px;
+        opacity: 0.8;
+        margin-bottom: 20px;
+      }
+
+      .widget-section {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .widget-section h3 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        opacity: 0.6;
+      }
+
+      .widget-section p {
+        font-size: 13px;
+        line-height: 1.5;
+        opacity: 0.9;
+      }
+      .window {
+        position: absolute;
+        background: #1e1e1e;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        overflow: hidden;
+        display: none;
+        flex-direction: column;
+        min-width: 600px;
+        min-height: 400px;
+      }
+
+      .window.active {
+        display: flex;
+      }
+
+      .window-header {
+        height: 52px;
+        background: #2b2b2b;
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        cursor: move;
+        border-bottom: 1px solid #1a1a1a;
+      }
+
+      .window-controls {
+        display: flex;
+        gap: 8px;
+      }
+
+      .window-control {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+      }
+
+      .window-control.close {
+        background: #ff5f57;
+      }
+
+      .window-control.minimize {
+        background: #febc2e;
+      }
+
+      .window-control.maximize {
+        background: #28c840;
+      }
+
+      .window-control:hover::after {
+        position: absolute;
+        font-size: 9px;
+        font-weight: bold;
+        color: rgba(0, 0, 0, 0.7);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .window-control.close:hover::after {
+        content: "×";
+      }
+
+      .window-control.minimize:hover::after {
+        content: "−";
+      }
+
+      .window-control.maximize:hover::after {
+        content: "+";
+      }
+
+      .window-title {
+        flex: 1;
+        text-align: center;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 500;
+        pointer-events: none;
+      }
+
+      .window-content {
+        flex: 1;
+        overflow: auto;
+        color: #fff;
+      }
+
+      #finder-content {
+        display: flex;
+        height: 100%;
+        background: #1e1e1e;
+      }
+
+      .finder-sidebar {
+        width: 180px;
+        background: #2b2b2b;
+        padding: 15px 10px;
+        border-right: 1px solid #1a1a1a;
+      }
+
+      .finder-section h4 {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        padding: 0 8px;
+      }
+
+      .finder-item {
+        padding: 6px 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: background 0.2s;
+        margin-bottom: 4px;
+      }
+
+      .finder-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .finder-item.active {
+        background: rgba(0, 122, 255, 0.6);
+      }
+
+      .finder-main {
+        flex: 1;
+        padding: 20px;
+        overflow: auto;
+        background: #1e1e1e;
+      }
+
+      .portfolio-section {
+        display: none;
+      }
+
+      .portfolio-section.active {
+        display: block;
+      }
+
+      .finder-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .finder-search {
+        flex: 1;
+        max-width: 300px;
+        padding: 6px 12px;
+        background: rgba(60, 60, 65, 0.6);
+        border: none;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 13px;
+      }
+
+      .finder-search::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .finder-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 20px;
+      }
+
+      .finder-folder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .finder-folder:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .folder-icon {
+        font-size: 48px;
+        margin-bottom: 8px;
+      }
+
+      .folder-name {
+        font-size: 12px;
+        text-align: center;
+      }
+
+      .safari-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 15px;
+        background: #2b2b2b;
+        border-bottom: 1px solid #1a1a1a;
+      }
+
+      .safari-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        background: rgba(60, 60, 65, 0.6);
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+      }
+
+      .safari-btn:hover {
+        background: rgba(80, 80, 85, 0.8);
+      }
+
+      .safari-url {
+        flex: 1;
+        padding: 6px 12px;
+        background: rgba(60, 60, 65, 0.6);
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        font-size: 13px;
+      }
+
+      .safari-frame {
+        width: 100%;
+        height: calc(100% - 48px);
+        border: none;
+        background: #1e1e1e;
+      }
+
+      #calculator-content {
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+        background: #1e1e1e;
+        gap: 0;
+        height: 100%;
+      }
+
+      .calc-display {
+        background: #1e1e1e;
+        padding: 20px 15px 10px 15px;
+        text-align: right;
+        font-size: 64px;
+        font-weight: 200;
+        min-height: 100px;
+        max-height: 100px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        color: #fff;
+        margin-bottom: 8px;
+        overflow: hidden;
+      }
+
+      .calc-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        padding: 4px;
+        flex: 1;
+      }
+
+      .calc-btn {
+        width: 100%;
+        height: 100%;
+        max-height: 70px;
+        font-size: 28px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.1s;
+        font-weight: 400;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .calc-btn.num {
+        background: #505050;
+      }
+
+      .calc-btn.op {
+        background: #ff9f0a;
+        font-size: 36px;
+      }
+
+      .calc-btn.func {
+        background: #a5a5a5;
+        color: #000;
+        font-size: 26px;
+      }
+
+      .calc-btn:active {
+        filter: brightness(1.4);
+        transform: scale(0.95);
+      }
+
+      .calc-btn.zero {
+        grid-column: span 2;
+        border-radius: 35px;
+        justify-content: flex-start;
+        padding-left: 28px;
+      }
+
+      #settings-content {
+        display: flex;
+        height: 100%;
+        background: #1e1e1e;
+      }
+
+      .settings-sidebar {
+        width: 200px;
+        background: #2b2b2b;
+        padding: 20px 10px;
+        border-right: 1px solid #1a1a1a;
+      }
+
+      .settings-item {
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        margin-bottom: 5px;
+        transition: background 0.2s;
+      }
+
+      .settings-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .settings-item.active {
+        background: rgba(0, 122, 255, 0.6);
+      }
+
+      .settings-main {
+        flex: 1;
+        padding: 30px;
+        overflow: auto;
+        background: #1e1e1e;
+      }
+
+      .settings-section {
+        margin-bottom: 30px;
+      }
+
+      .settings-section h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+      }
+
+      .wallpaper-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
+      }
+
+      .wallpaper-item {
+        aspect-ratio: 16/10;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: all 0.2s;
+        position: relative;
+        overflow: hidden;
+        background: #2b2b2b;
+      }
+
+      .wallpaper-item:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+      }
+
+      .wallpaper-item.active {
+        border-color: rgba(0, 122, 255, 1);
+      }
+
+      .wallpaper-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .wallpaper-label {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        right: 8px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 6px;
+        border-radius: 4px;
+        font-size: 11px;
+        text-align: center;
+      }
+
+      /* New Settings Styles */
+      .settings-section {
+        display: none;
+      }
+
+      .settings-section.active {
+        display: block;
+      }
+
+      .settings-option {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: rgba(60, 60, 65, 0.3);
+        border-radius: 8px;
+      }
+
+      .settings-option label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+
+      .radio-group {
+        display: flex;
+        gap: 15px;
+      }
+
+      .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+
+      .slider-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 10px;
+      }
+
+      .settings-slider {
+        flex: 1;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+        outline: none;
+        appearance: none;
+      }
+
+      .settings-slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #007aff;
+        cursor: pointer;
+      }
+
+      .color-palette-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+      }
+
+      .color-palette {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+      }
+
+      .color-palette:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .color-palette.active {
+        border-color: #007aff;
+      }
+
+      .palette-preview {
+        display: flex;
+        width: 60px;
+        height: 20px;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 8px;
+      }
+
+      .palette-preview div {
+        flex: 1;
+      }
+
+      .accent-colors {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+        max-width: 400px;
+      }
+
+      .accent-color {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: all 0.2s;
+      }
+
+      .accent-color:hover {
+        transform: scale(1.1);
+      }
+
+      .accent-color.active {
+        border-color: #fff;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .theme-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+      }
+
+      .theme-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+      }
+
+      .theme-option:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .theme-option.active {
+        border-color: #007aff;
+      }
+
+      .theme-preview {
+        width: 80px;
+        height: 50px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+      }
+
+      #terminal-content {
+        background: #1e1e1e;
+        padding: 20px;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+          "Segoe UI", sans-serif;
+        font-size: 13px;
+      }
+
+      .terminal-output {
+        color: #fff;
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+
+      .terminal-input-line {
+        display: flex;
+        align-items: center;
+        color: #fff;
+      }
+
+      .terminal-prompt {
+        margin-right: 8px;
+      }
+
+      .terminal-input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #ffa3a3;
+        font-family: inherit;
+        font-size: inherit;
+        outline: none;
+      }
+
+      #dock {
+        position: fixed;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(40, 40, 45, 0.7);
+        backdrop-filter: blur(40px);
+        padding: 8px 12px;
+        border-radius: 18px;
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+        z-index: 10000;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        border: 0.5px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .dock-item {
+        width: 52px;
+        height: 52px;
+        background: rgba(60, 60, 65, 0.8);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        font-size: 28px;
+      }
+
+      .dock-item:hover {
+        transform: translateY(-12px) scale(1.2);
+      }
+
+      .dock-item.minimized::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+      }
+
+      @keyframes genie {
+        0% {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(0.1) translateY(400px);
+        }
+      }
+
+      .window.minimizing {
+        animation: genie 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @media (max-width: 768px) {
         #desktop-widget {
-            position: absolute;
-            top: 50px;
-            right: 20px;
-            width: 320px;
-            background: rgba(40, 40, 45, 0.75);
-            backdrop-filter: blur(40px);
-            border-radius: 18px;
-            padding: 20px;
-            color: #fff;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            cursor: move;
-            user-select: none;
-        }
-
-        #widget-time {
-            font-size: 48px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        #widget-date {
-            font-size: 16px;
-            opacity: 0.8;
-            margin-bottom: 20px;
-        }
-
-        .widget-section {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .widget-section h3 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            opacity: 0.6;
-        }
-
-        .widget-section p {
-            font-size: 13px;
-            line-height: 1.5;
-            opacity: 0.9;
+          width: 280px;
+          right: 10px;
+          top: 40px;
         }
 
         .window {
-            position: absolute;
-            background: #1e1e1e;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-            overflow: hidden;
-            display: none;
-            flex-direction: column;
-            min-width: 600px;
-            min-height: 400px;
-        }
-
-        .window.active {
-            display: flex;
-        }
-
-        .window-header {
-            height: 52px;
-            background: #2b2b2b;
-            display: flex;
-            align-items: center;
-            padding: 0 12px;
-            cursor: move;
-            border-bottom: 1px solid #1a1a1a;
-        }
-
-        .window-controls {
-            display: flex;
-            gap: 8px;
-        }
-
-        .window-control {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .window-control.close {
-            background: #ff5f57;
-        }
-
-        .window-control.minimize {
-            background: #febc2e;
-        }
-
-        .window-control.maximize {
-            background: #28c840;
-        }
-
-        .window-control:hover::after {
-            position: absolute;
-            font-size: 9px;
-            font-weight: bold;
-            color: rgba(0, 0, 0, 0.7);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .window-control.close:hover::after {
-            content: '×';
-        }
-
-        .window-control.minimize:hover::after {
-            content: '−';
-        }
-
-        .window-control.maximize:hover::after {
-            content: '+';
-        }
-
-        .window-title {
-            flex: 1;
-            text-align: center;
-            color: #fff;
-            font-size: 13px;
-            font-weight: 500;
-            pointer-events: none;
-        }
-
-        .window-content {
-            flex: 1;
-            overflow: auto;
-            color: #fff;
-        }
-
-        #finder-content {
-            display: flex;
-            height: 100%;
-            background: #1e1e1e;
-        }
-
-        .finder-sidebar {
-            width: 180px;
-            background: #2b2b2b;
-            padding: 15px 10px;
-            border-right: 1px solid #1a1a1a;
-        }
-
-        .finder-section h4 {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            padding: 0 8px;
-        }
-
-        .finder-item {
-            padding: 6px 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
-            margin-bottom: 4px;
-        }
-
-        .finder-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .finder-item.active {
-            background: rgba(0, 122, 255, 0.6);
-        }
-
-        .finder-main {
-            flex: 1;
-            padding: 20px;
-            overflow: auto;
-            background: #1e1e1e;
-        }
-
-        .portfolio-section {
-            display: none;
-        }
-
-        .portfolio-section.active {
-            display: block;
-        }
-
-        .finder-toolbar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .finder-search {
-            flex: 1;
-            max-width: 300px;
-            padding: 6px 12px;
-            background: rgba(60, 60, 65, 0.6);
-            border: none;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 13px;
-        }
-
-        .finder-search::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .finder-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 20px;
-        }
-
-        .finder-folder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .finder-folder:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .folder-icon {
-            font-size: 48px;
-            margin-bottom: 8px;
-        }
-
-        .folder-name {
-            font-size: 12px;
-            text-align: center;
-        }
-
-        .safari-toolbar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
-            background: #2b2b2b;
-            border-bottom: 1px solid #1a1a1a;
-        }
-
-        .safari-btn {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            background: rgba(60, 60, 65, 0.6);
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-        .safari-btn:hover {
-            background: rgba(80, 80, 85, 0.8);
-        }
-
-        .safari-url {
-            flex: 1;
-            padding: 6px 12px;
-            background: rgba(60, 60, 65, 0.6);
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 13px;
-        }
-
-        .safari-frame {
-            width: 100%;
-            height: calc(100% - 48px);
-            border: none;
-            background: #1e1e1e;
-        }
-
-        #calculator-content {
-            display: flex;
-            flex-direction: column;
-            padding: 8px;
-            background: #1e1e1e;
-            gap: 0;
-            height: 100%;
-        }
-
-        .calc-display {
-            background: #1e1e1e;
-            padding: 20px 15px 10px 15px;
-            text-align: right;
-            font-size: 64px;
-            font-weight: 200;
-            min-height: 100px;
-            max-height: 100px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-end;
-            color: #fff;
-            margin-bottom: 8px;
-            overflow: hidden;
-        }
-
-        .calc-buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            padding: 4px;
-            flex: 1;
-        }
-
-        .calc-btn {
-            width: 100%;
-            height: 100%;
-            max-height: 70px;
-            font-size: 28px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.1s;
-            font-weight: 400;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .calc-btn.num {
-            background: #505050;
-        }
-
-        .calc-btn.op {
-            background: #ff9f0a;
-            font-size: 36px;
-        }
-
-        .calc-btn.func {
-            background: #a5a5a5;
-            color: #000;
-            font-size: 26px;
-        }
-
-        .calc-btn:active {
-            filter: brightness(1.4);
-            transform: scale(0.95);
-        }
-
-        .calc-btn.zero {
-            grid-column: span 2;
-            border-radius: 35px;
-            justify-content: flex-start;
-            padding-left: 28px;
-        }
-
-        #settings-content {
-            display: flex;
-            height: 100%;
-            background: #1e1e1e;
-        }
-
-        .settings-sidebar {
-            width: 200px;
-            background: #2b2b2b;
-            padding: 20px 10px;
-            border-right: 1px solid #1a1a1a;
-        }
-
-        .settings-item {
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            margin-bottom: 5px;
-            transition: background 0.2s;
-        }
-
-        .settings-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .settings-item.active {
-            background: rgba(0, 122, 255, 0.6);
-        }
-
-        .settings-main {
-            flex: 1;
-            padding: 30px;
-            overflow: auto;
-            background: #1e1e1e;
-        }
-
-        .settings-section {
-            margin-bottom: 30px;
-        }
-
-        .settings-section h3 {
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
-
-        .wallpaper-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-        }
-
-        .wallpaper-item {
-            aspect-ratio: 16/10;
-            border-radius: 8px;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.2s;
-            position: relative;
-            overflow: hidden;
-            background: #2b2b2b;
-        }
-
-        .wallpaper-item:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
-
-        .wallpaper-item.active {
-            border-color: rgba(0, 122, 255, 1);
-        }
-
-        .wallpaper-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .wallpaper-label {
-            position: absolute;
-            bottom: 8px;
-            left: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 6px;
-            border-radius: 4px;
-            font-size: 11px;
-            text-align: center;
-        }
-
-        #terminal-content {
-            background: #1e1e1e;
-            padding: 20px;
-            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
-            font-size: 13px;
-        }
-
-        .terminal-output {
-            color: #0f0;
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-
-        .terminal-input-line {
-            display: flex;
-            align-items: center;
-            color: #0f0;
-        }
-
-        .terminal-prompt {
-            margin-right: 8px;
-        }
-
-        .terminal-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #0f0;
-            font-family: inherit;
-            font-size: inherit;
-            outline: none;
-        }
-
-        #dock {
-            position: fixed;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(40, 40, 45, 0.7);
-            backdrop-filter: blur(40px);
-            padding: 8px 12px;
-            border-radius: 18px;
-            display: flex;
-            gap: 8px;
-            align-items: flex-end;
-            z-index: 10000;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            border: 0.5px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .dock-item {
-            width: 52px;
-            height: 52px;
-            background: rgba(60, 60, 65, 0.8);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            font-size: 28px;
-        }
-
-        .dock-item:hover {
-            transform: translateY(-12px) scale(1.2);
-        }
-
-        .dock-item.minimized::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-        }
-
-        @keyframes genie {
-            0% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(0.1) translateY(400px);
-            }
-        }
-
-        .window.minimizing {
-            animation: genie 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @media (max-width: 768px) {
-            #desktop-widget {
-                width: 280px;
-                right: 10px;
-                top: 40px;
-            }
-
-            .window {
-                min-width: 90vw;
-                width: 90vw !important;
-                left: 5vw !important;
-            }
-        }
+          min-width: 90vw;
+          width: 90vw !important;
+          left: 5vw !important;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <div id="lockscreen">
+      <div class="lock-top">
+        <div class="lock-date" id="lock-date">Tuesday, October 7</div>
+        <div class="lock-time" id="lock-time">7:23</div>
+      </div>
+      <div class="lock-user">
+        <input
+          type="password"
+          class="lock-password"
+          id="lock-password"
+          placeholder="Enter Password"
+        />
+        <div class="lock-hint">Touch ID or Enter Password</div>
+      </div>
+    </div>
+
     <div id="desktop">
-        <div id="menubar">
-            <div class="menu-item" id="apple-logo" onclick="toggleAppleMenu()">
-                <svg width="16" height="16" viewBox="0 0 814 1000" fill="white">
-                    <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57-155.5-127C46.7 790.7 0 663 0 541.8c0-194.4 126.4-297.5 250.8-297.5 66.1 0 121.2 43.4 162.7 43.4 39.5 0 101.1-46 176.3-46 28.5 0 130.9 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z"/>
-                </svg>
-            </div>
-            <div class="menu-item" onclick="openApp('finder')">Finder</div>
-            <div class="menu-item" onclick="alert('File menu')">File</div>
-            <div class="menu-item" onclick="alert('Edit menu')">Edit</div>
-            <div class="menu-item" onclick="alert('View menu')">View</div>
-            <div class="menu-item" onclick="alert('Go menu')">Go</div>
-            <div class="menu-item" onclick="alert('Window menu')">Window</div>
-            <div class="menu-item" onclick="alert('Help menu')">Help</div>
-            <div id="menu-right">
-                <div class="menu-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                        <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
-                    </svg>
-                </div>
-                <div class="menu-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                        <path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/>
-                    </svg>
-                    <span style="margin-left: 4px;">100%</span>
-                </div>
-                <div id="menu-time"></div>
-            </div>
+      <div id="menubar">
+        <div class="menu-item" id="apple-logo">
+          <svg width="18" height="18" viewBox="0 0 814 1000" fill="white">
+            <path
+              d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76.5 0-103.7 40.8-165.9 40.8s-105.6-57-155.5-127C46.7 790.7 0 663 0 541.8c0-194.4 126.4-297.5 250.8-297.5 66.1 0 121.2 43.4 162.7 43.4 39.5 0 101.1-46 176.3-46 28.5 0 130.9 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z"
+            />
+          </svg>
+        </div>
+        <div class="menu-item" onclick="openApp('finder')">Finder</div>
+        <div class="menu-item" onclick="alert('File menu')">File</div>
+        <div class="menu-item" onclick="alert('Edit menu')">Edit</div>
+        <div class="menu-item" onclick="alert('View menu')">View</div>
+        <div class="menu-item" onclick="alert('Go menu')">Go</div>
+        <div class="menu-item" onclick="alert('Window menu')">Window</div>
+        <div class="menu-item" onclick="alert('Help menu')">Help</div>
+        <div id="menu-right">
+          <div class="menu-status-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z"
+              />
+            </svg>
+          </div>
+          <div class="menu-status-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M17 4H22V6H20V17H22V19H17V17H19V6H17V4M7 4H12V6H10V17H12V19H7V17H9V6H7V4Z"
+              />
+            </svg>
+          </div>
+          <div class="menu-status-item" id="cc-toggle">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+              <rect x="3" y="3" width="7" height="7" rx="2" />
+              <rect x="14" y="3" width="7" height="7" rx="2" />
+              <rect x="14" y="14" width="7" height="7" rx="2" />
+              <rect x="3" y="14" width="7" height="7" rx="2" />
+            </svg>
+          </div>
+          <div class="menu-status-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+            </svg>
+          </div>
+          <div class="menu-status-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+            </svg>
+          </div>
+          <div class="menu-status-item">
+            <svg width="16" height="10" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M2 17h20v2H2zm1.15-4.05L4 11l.85 1.95L7.8 13l-1.95.85L5 16l-.85-1.95L1.2 13l1.95-.85zM13.5 7l.5 2h2l-1.5 1.5L15 13l-1.5-1L12 13l.5-2.5L11 9h2l.5-2z"
+              />
+            </svg>
+          </div>
+          <div class="menu-status-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"
+              />
+            </svg>
+            <span>100%</span>
+          </div>
+          <div class="menu-status-item" id="menu-time"></div>
+        </div>
+      </div>
+
+      <div id="apple-menu">
+        <div class="apple-menu-item" onclick="alert('About This Mac')">
+          <span>💻 About This Mac</span>
+        </div>
+        <div class="apple-menu-divider"></div>
+        <div class="apple-menu-item" onclick="openApp('settings')">
+          <span>⚙️ System Settings...</span>
+        </div>
+        <div class="apple-menu-divider"></div>
+        <div class="apple-menu-item" onclick="showShutdownModal('sleep')">
+          <span>😴 Sleep</span>
+        </div>
+        <div class="apple-menu-item" onclick="showShutdownModal('restart')">
+          <span>🔄 Restart...</span>
+        </div>
+        <div class="apple-menu-item" onclick="showShutdownModal('shutdown')">
+          <span>⏻ Shut Down...</span>
+        </div>
+        <div class="apple-menu-divider"></div>
+        <div class="apple-menu-item" onclick="lockScreen()">
+          <span>🔒 Lock Screen</span>
+          <span style="opacity: 0.5">⌃⌘Q</span>
+        </div>
+      </div>
+
+      <div id="shutdown-modal">
+        <div class="shutdown-dialog">
+          <div class="shutdown-icon" id="shutdown-icon">⏻</div>
+          <div class="shutdown-title" id="shutdown-title">
+            Are you sure you want to shut down your computer now?
+          </div>
+          <div class="shutdown-text">
+            All running applications will be closed.
+          </div>
+          <div class="shutdown-buttons">
+            <button class="shutdown-btn cancel" onclick="closeShutdownModal()">
+              Cancel
+            </button>
+            <button class="shutdown-btn confirm" id="shutdown-confirm">
+              Shut Down
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="control-center">
+        <div class="cc-grid">
+          <div class="cc-item active">
+            <div class="cc-icon">📶</div>
+            <div class="cc-label">Wi-Fi</div>
+          </div>
+          <div class="cc-item active">
+            <div class="cc-icon">🔵</div>
+            <div class="cc-label">Bluetooth</div>
+          </div>
+          <div class="cc-item">
+            <div class="cc-icon">📡</div>
+            <div class="cc-label">AirDrop</div>
+          </div>
+          <div class="cc-item active">
+            <div class="cc-icon">🌙</div>
+            <div class="cc-label">Do Not Disturb</div>
+          </div>
         </div>
 
-        <div id="desktop-widget">
-            <div id="widget-time"></div>
-            <div id="widget-date"></div>
-            <div class="widget-section">
-                <h3>PORTFOLIO</h3>
-                <p><strong><h1>Devpratap Chauhan</h1></strong><br>Full Stack Developer<br>Passionate about creating amazing web experiences</p>
+        <div class="cc-section">
+          <div class="cc-slider">
+            <div class="cc-slider-label">
+              <span>☀️</span>
+              <span>Display</span>
             </div>
-            <div class="widget-section">
-                <h3>SKILLS</h3>
-                <p> Html • Css • React • Node.js • Python • UI/UX Design</p>
-            </div>
+            <input
+              type="range"
+              class="slider"
+              id="brightness-slider"
+              min="0"
+              max="100"
+              value="75"
+            />
+          </div>
         </div>
 
-        <div class="window" id="finder-window" style="width: 900px; height: 600px; top: 80px; left: 100px;">
-            <div class="window-header">
-                <div class="window-controls">
-                    <div class="window-control close" onclick="closeWindow('finder-window')"></div>
-                    <div class="window-control minimize" onclick="minimizeWindow('finder-window')"></div>
-                    <div class="window-control maximize" onclick="maximizeWindow('finder-window')"></div>
-                </div>
-                <div class="window-title">About Devpratap</div>
+        <div class="cc-section">
+          <div class="cc-slider">
+            <div class="cc-slider-label">
+              <span>🔊</span>
+              <span>Sound</span>
             </div>
-            <div class="window-content" id="finder-content">
-                <div class="finder-sidebar">
-                    <div class="finder-section">
-                        <div class="finder-item active" data-section="about">👤 About Me</div>
-                        <div class="finder-item" data-section="education">🎓 Education</div>
-                        <div class="finder-item" data-section="skills">🛠️ Skills</div>
-                        <div class="finder-item" data-section="projects">💼 Projects</div>
-                        <div class="finder-item" data-section="resume">📄 Resume</div>
-                        <div style="margin-top: 20px; padding: 8px 12px;">
-                            <button style="width: 100%; padding: 8px; background: rgba(255, 20, 147, 0.8); border: none; border-radius: 6px; color: white; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                                ❤️ Sponsor
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="finder-main" id="portfolio-main">
-                    <div class="portfolio-section active" id="section-about">
-                        <div style="text-align: center; margin-bottom: 30px;">
-
-                            <img src="dev.png" alt="Devpratap Chauhan" style="width: 130px; height: 130px; border-radius: 50%; margin-bottom: 15px; border: 4px solid #667eea;">
-
-                            <h1 style="font-size: 28px; margin-bottom: 10px;">my name is <span style="color: #667eea;">Devpratap Chauhan</span>,</h1>
-                            <h2 style="font-size: 24px; color: #ff1493;">I'm a <span style="color: #ff1493;">Full Stack Developer!</span></h2>
-                            <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin: 20px auto;"></div>
-                        </div>
-                        <div style="max-width: 700px; margin: 0 auto; line-height: 1.8;">
-                            <p style="margin-bottom: 15px;">📚 I'm a passionate developer currently pursuing Computer Science. I love creating amazing web experiences that solve real problems.</p>
-                            <p style="margin-bottom: 15px;">💻 I enjoy building awesome software that solves practical problems and makes people's lives easier.</p>
-                            <p style="margin-bottom: 15px;">🎮 When I am not coding my next project, I like to spend my time reading books, playing games, or exploring new technologies.</p>
-                            <p style="margin-bottom: 15px;">✨ And I also have interest in UI/UX Design & Modern Web Technologies!</p>
-                            <p style="margin-top: 25px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-left: 3px solid #667eea; border-radius: 4px;">
-                                📧 Contact: devgurjar9897@gmail.com | GitHub: github.com/devchauhann
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="portfolio-section" id="section-skills">
-                        <h1 style="font-size: 28px; margin-bottom: 10px; text-align: center;">Technical Skills</h1>
-                        <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin: 20px auto 30px;"></div>
-                        
-                        <p style="margin-bottom: 15px;">→ I've worked with a wide variety of programming languages & frameworks.</p>
-                        <p style="margin-bottom: 15px;">→ My areas of expertise are <span style="color: #ff9500;">front-end development, React.js & javascript!</span></p>
-                        <p style="margin-bottom: 30px;">→ Here are my most frequently used</p>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 800px; margin: 0 auto;">
-                            <div>
-                                <h3 style="font-size: 20px; margin-bottom: 20px; text-align: center;">Languages & Tools</h3>
-                                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-                                    <span style="background: #f0db4f; color: #000; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">JavaScript</span>
-                                    <span style="background: #00599c; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">C++</span>
-                                    <span style="background: #3776ab; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Python</span>
-                                    <span style="background: #e34c26; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">HTML5</span>
-                                    <span style="background: #cc6699; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Sass</span>
-                                    <span style="background: #f34f29; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Git</span>
-                                    <span style="background: #ffa611; color: #000; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Firebase</span>
-                                </div>
-                            </div>
-                            <div>
-                                <h3 style="font-size: 20px; margin-bottom: 20px; text-align: center;">Frameworks & Libraries</h3>
-                                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-                                    <span style="background: #000; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Next</span>
-                                    <span style="background: #61dafb; color: #000; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">React</span>
-                                    <span style="background: #02569b; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Flutter</span>
-                                    <span style="background: #38bdf8; color: #000; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Tailwind CSS</span>
-                                    <span style="background: #68a063; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Node.js</span>
-                                    <span style="background: #0769ad; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">jQuery</span>
-                                    <span style="background: #764abc; color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;">Redux</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <p style="margin-top: 30px; text-align: center;">→ And of course, <span style="background: #0078d4; color: #fff; padding: 4px 10px; border-radius: 4px; font-weight: 600;">Linux</span> !</p>
-                    </div>
-
-                    <div class="portfolio-section" id="section-education">
-                        <h1 style="font-size: 28px; margin-bottom: 10px; text-align: center;">Education</h1>
-                        <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin: 20px auto 40px;"></div>
-                        
-                        <div style="max-width: 700px; margin: 0 auto;">
-                            <div style="background: rgba(102, 126, 234, 0.1); padding: 25px; border-radius: 12px; border-left: 4px solid #667eea; margin-bottom: 20px;">
-                                <h3 style="font-size: 20px; margin-bottom: 10px;">🎓 Computer Science</h3>
-                                <p style="opacity: 0.8; margin-bottom: 8px;">Currently Pursuing</p>
-                                <p style="line-height: 1.6;">Focused on web development, data structures, algorithms, and modern software engineering practices.</p>
-                            </div>
-
-                            <div style="background: rgba(102, 126, 234, 0.1); padding: 25px; border-radius: 12px; border-left: 4px solid #667eea;">
-                                <h3 style="font-size: 20px; margin-bottom: 10px;">💼 Experience</h3>
-                                <p style="opacity: 0.8; margin-bottom: 8px;">Building Real-World Projects</p>
-                                <p style="line-height: 1.6;">Hands-on experience with React, Node.js, and modern web technologies through various personal and academic projects.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="portfolio-section" id="section-projects">
-                        <h1 style="font-size: 28px; margin-bottom: 10px; text-align: center;">My Projects</h1>
-                        <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin: 20px auto 40px;"></div>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
-                            <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; transition: transform 0.2s;">
-                                <div style="font-size: 40px; margin-bottom: 15px;">🌐</div>
-                                <h3 style="font-size: 18px; margin-bottom: 10px;">Portfolio Website</h3>
-                                <p style="opacity: 0.8; line-height: 1.6; font-size: 14px;">A modern macOS-style portfolio showcasing my skills and projects.</p>
-                                <div style="margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
-                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">HTML</span>
-                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">CSS</span>
-                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">JavaScript</span>
-                                </div>
-                            </div>
-
-                            <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; transition: transform 0.2s;">
-                                <div style="font-size: 40px; margin-bottom: 15px;">⚛️</div>
-                                <h3 style="font-size: 18px; margin-bottom: 10px;">React Applications</h3>
-                                <p style="opacity: 0.8; line-height: 1.6; font-size: 14px;">Various React projects including todo apps, weather apps, and more.</p>
-                                <div style="margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
-                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">React</span>
-                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">JavaScript</span>
-                                </div>
-                            </div>
-
-                            <div style="background: rgba(102, 126, 234, 0.1); padding: 20px; border-radius: 12px; transition: transform 0.2s;">
-                                <div style="font-size: 40px; margin-bottom: 15px;">🎨</div>
-                                <h3 style="font-size: 18px; margin-bottom: 10px;">UI/UX Designs</h3>
-                                <p style="opacity: 0.8; line-height: 1.6; font-size: 14px;">Modern and responsive design projects with focus on user experience.</p>
-                                <div style="margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
-                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">CSS</span>
-                                    <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 4px; font-size: 11px;">Tailwind</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="portfolio-section" id="section-resume">
-                        <h1 style="font-size: 28px; margin-bottom: 10px; text-align: center;">Resume</h1>
-                        <div style="width: 200px; height: 2px; background: linear-gradient(90deg, transparent, #667eea, transparent); margin: 20px auto 40px;"></div>
-                        
-                        <div style="max-width: 600px; margin: 0 auto; text-align: center;">
-                            <p style="margin-bottom: 30px; line-height: 1.8;">Download my resume to learn more about my experience, skills, and projects.</p>
-                            <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
-                                📄 Download Resume
-                            </button>
-                            <div style="margin-top: 40px; padding: 20px; background: rgba(102, 126, 234, 0.1); border-radius: 12px;">
-                                <h3 style="margin-bottom: 15px;">Quick Links</h3>
-                                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                                    <a href="https://github.com/devchauhann" style="color: #667eea; text-decoration: none; padding: 8px 16px; background: rgba(255,255,255,0.1); border-radius: 6px;">GitHub</a>
-                                    <a href="mailto:devgurjar9897@gmail.com" style="color: #667eea; text-decoration: none; padding: 8px 16px; background: rgba(255,255,255,0.1); border-radius: 6px;">Email</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <input
+              type="range"
+              class="slider"
+              id="volume-slider"
+              min="0"
+              max="100"
+              value="50"
+            />
+          </div>
         </div>
+      </div>
 
-        <div class="window" id="safari-window" style="width: 1000px; height: 700px; top: 100px; left: 150px;">
-            <div class="window-header">
-                <div class="window-controls">
-                    <div class="window-control close" onclick="closeWindow('safari-window')"></div>
-                    <div class="window-control minimize" onclick="minimizeWindow('safari-window')"></div>
-                    <div class="window-control maximize" onclick="maximizeWindow('safari-window')"></div>
-                </div>
-                <div class="window-title">Safari</div>
-            </div>
-            <div class="window-content">
-                <div class="safari-toolbar">
-                    <button class="safari-btn">◀</button>
-                    <button class="safari-btn">▶</button>
-                    <input type="text" class="safari-url" id="safari-url" placeholder="Search or enter website name" value="https://github.com">
-                    <button class="safari-btn" id="safari-go">Go</button>
-                </div>
-                <iframe class="safari-frame" id="safari-frame" src="about:blank"></iframe>
-            </div>
+      <div id="desktop-widget">
+        <div id="widget-time"></div>
+        <div id="widget-date"></div>
+        <div class="widget-section">
+          <h3>PORTFOLIO</h3>
+          <p>
+            <strong><h1>Devpratap Chauhan</h1></strong><br />Full Stack
+            Developer<br />Passionate about creating amazing web experiences
+          </p>
         </div>
+        <div class="widget-section">
+          <h3>SKILLS</h3>
+          <p>Html • Css • React • Node.js • Python • UI/UX Design</p>
+        </div>
+      </div>
 
-        <div class="window" id="calculator-window" style="width: 320px; height: 520px; top: 120px; left: 200px;">
-            <div class="window-header">
-                <div class="window-controls">
-                    <div class="window-control close" onclick="closeWindow('calculator-window')"></div>
-                    <div class="window-control minimize" onclick="minimizeWindow('calculator-window')"></div>
-                    <div class="window-control maximize" onclick="maximizeWindow('calculator-window')"></div>
-                </div>
-                <div class="window-title"></div>
-            </div>
-            <div class="window-content" id="calculator-content">
-                <div class="calc-display" id="calc-display">0</div>
-                <div class="calc-buttons">
-                    <button class="calc-btn func" onclick="clearCalc()">AC</button>
-                    <button class="calc-btn func" onclick="toggleSign()">+/-</button>
-                    <button class="calc-btn func" onclick="inputPercent()">%</button>
-                    <button class="calc-btn op" onclick="inputOp('/')">÷</button>
-                    <button class="calc-btn num" onclick="inputNum('7')">7</button>
-                    <button class="calc-btn num" onclick="inputNum('8')">8</button>
-                    <button class="calc-btn num" onclick="inputNum('9')">9</button>
-                    <button class="calc-btn op" onclick="inputOp('*')">×</button>
-                    <button class="calc-btn num" onclick="inputNum('4')">4</button>
-                    <button class="calc-btn num" onclick="inputNum('5')">5</button>
-                    <button class="calc-btn num" onclick="inputNum('6')">6</button>
-                    <button class="calc-btn op" onclick="inputOp('-')">−</button>
-                    <button class="calc-btn num" onclick="inputNum('1')">1</button>
-                    <button class="calc-btn num" onclick="inputNum('2')">2</button>
-                    <button class="calc-btn num" onclick="inputNum('3')">3</button>
-                    <button class="calc-btn op" onclick="inputOp('+')">+</button>
-                    <button class="calc-btn num zero" onclick="inputNum('0')">0</button>
-                    <button class="calc-btn num" onclick="inputNum('.')">.</button>
-                    <button class="calc-btn op" onclick="inputEquals()">=</button>
-                </div>
-            </div>
+      <div
+        class="window"
+        id="finder-window"
+        style="width: 900px; height: 600px; top: 80px; left: 100px"
+      >
+        <div class="window-header">
+          <div class="window-controls">
+            <div
+              class="window-control close"
+              onclick="closeWindow('finder-window')"
+            ></div>
+            <div
+              class="window-control minimize"
+              onclick="minimizeWindow('finder-window')"
+            ></div>
+            <div
+              class="window-control maximize"
+              onclick="maximizeWindow('finder-window')"
+            ></div>
+          </div>
+          <div class="window-title">About Devpratap</div>
         </div>
+        <div class="window-content" id="finder-content">
+          <div class="finder-sidebar">
+            <div class="finder-section">
+              <div class="finder-item active" data-section="about">
+                👤 About Me
+              </div>
+              <div class="finder-item" data-section="education">
+                🎓 Education
+              </div>
+              <div class="finder-item" data-section="skills">🛠️ Skills</div>
+              <div class="finder-item" data-section="projects">💼 Projects</div>
+              <div class="finder-item" data-section="resume">📄 Resume</div>
+              <div style="margin-top: 20px; padding: 8px 12px">
+                <button
+                  style="
+                    width: 100%;
+                    padding: 8px;
+                    background: rgba(255, 20, 147, 0.8);
+                    border: none;
+                    border-radius: 6px;
+                    color: white;
+                    font-size: 13px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                  "
+                >
+                  ❤️ Sponsor
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="finder-main" id="portfolio-main">
+            <div class="portfolio-section active" id="section-about">
+              <div style="text-align: center; margin-bottom: 30px">
+                <img
+                  src="dev.png"
+                  alt="Devpratap Chauhan"
+                  style="
+                    width: 140px;
+                    height: 140px;
+                    border-radius: 50%;
+                    margin-bottom: 15px;
+                    border: 4px solid #667eea;
+                  "
+                />
 
-        <div class="window" id="settings-window" style="width: 800px; height: 600px; top: 140px; left: 250px;">
-            <div class="window-header">
-                <div class="window-controls">
-                    <div class="window-control close" onclick="closeWindow('settings-window')"></div>
-                    <div class="window-control minimize" onclick="minimizeWindow('settings-window')"></div>
-                    <div class="window-control maximize" onclick="maximizeWindow('settings-window')"></div>
-                </div>
-                <div class="window-title">System Settings</div>
+                <h1 style="font-size: 28px; margin-bottom: 10px">
+                  my name is
+                  <span style="color: #667eea">Devpratap Chauhan</span>,
+                </h1>
+                <h2 style="font-size: 24px; color: #ff1493">
+                  I'm a
+                  <span style="color: #ff1493">Full Stack Developer!</span>
+                </h2>
+                <div
+                  style="
+                    width: 200px;
+                    height: 2px;
+                    background: linear-gradient(
+                      90deg,
+                      transparent,
+                      #667eea,
+                      transparent
+                    );
+                    margin: 20px auto;
+                  "
+                ></div>
+              </div>
+              <div style="max-width: 700px; margin: 0 auto; line-height: 1.8">
+                <p style="margin-bottom: 15px">
+                  📚 I'm a passionate developer currently pursuing Computer
+                  Science. I love creating amazing web experiences that solve
+                  real problems.
+                </p>
+                <p style="margin-bottom: 15px">
+                  💻 I enjoy building awesome software that solves practical
+                  problems and makes people's lives easier.
+                </p>
+                <p style="margin-bottom: 15px">
+                  🎮 When I am not coding my next project, I like to spend my
+                  time reading books, playing games, or exploring new
+                  technologies.
+                </p>
+                <p style="margin-bottom: 15px">
+                  ✨ And I also have interest in UI/UX Design & Modern Web
+                  Technologies!
+                </p>
+                <p
+                  style="
+                    margin-top: 25px;
+                    padding: 15px;
+                    background: rgba(102, 126, 234, 0.1);
+                    border-left: 3px solid #667eea;
+                    border-radius: 4px;
+                  "
+                >
+                  📧 Contact: devgurjar9897@gmail.com | GitHub:
+                  github.com/devchauhann
+                </p>
+              </div>
             </div>
-            <div class="window-content" id="settings-content">
-                <div class="settings-sidebar">
-                    <div class="settings-item active">🎨 Appearance</div>
-                    <div class="settings-item">🖼️ Wallpaper</div>
-                </div>
-                <div class="settings-main">
-                    <div class="settings-section">
-                        <h3>Desktop & Screen Saver</h3>
-                        <p style="margin-bottom: 20px; opacity: 0.7;">Choose your desktop wallpaper</p>
-                        <div class="wallpaper-grid" id="wallpaper-grid"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="window" id="terminal-window" style="width: 700px; height: 500px; top: 160px; left: 300px;">
-            <div class="window-header">
-                <div class="window-controls">
-                    <div class="window-control close" onclick="closeWindow('terminal-window')"></div>
-                    <div class="window-control minimize" onclick="minimizeWindow('terminal-window')"></div>
-                    <div class="window-control maximize" onclick="maximizeWindow('terminal-window')"></div>
-                </div>
-                <div class="window-title">Terminal</div>
-            </div>
-            <div class="window-content" id="terminal-content">
-                <div id="terminal-output">
-                    <div class="terminal-output">Last login: Sun Oct 5 2025</div>
-                    <div class="terminal-output">macOS Portfolio Terminal v1.0</div>
-                    <div class="terminal-output">Type 'help' for available commands</div>
-                </div>
-                <div class="terminal-input-line">
-                    <span class="terminal-prompt">user@macOS ~ %</span>
-                    <input type="text" class="terminal-input" id="terminal-input" autocomplete="off">
-                </div>
-            </div>
-        </div>
+            <div class="portfolio-section" id="section-skills">
+              <h1
+                style="font-size: 28px; margin-bottom: 10px; text-align: center"
+              >
+                Technical Skills
+              </h1>
+              <div
+                style="
+                  width: 200px;
+                  height: 2px;
+                  background: linear-gradient(
+                    90deg,
+                    transparent,
+                    #667eea,
+                    transparent
+                  );
+                  margin: 20px auto 30px;
+                "
+              ></div>
 
-        <div id="dock">
-            <div class="dock-item" data-app="finder" title="Finder">📁</div>
-            <div class="dock-item" data-app="safari" title="Safari">🧭</div>
-            <div class="dock-item" data-app="calculator" title="Calculator">🔢</div>
-            <div class="dock-item" data-app="settings" title="Settings">⚙️</div>
-            <div class="dock-item" data-app="terminal" title="Terminal">⌨️</div>
+              <p style="margin-bottom: 15px">
+                → I've worked with a wide variety of programming languages &
+                frameworks.
+              </p>
+              <p style="margin-bottom: 15px">
+                → My areas of expertise are
+                <span style="color: #ff9500"
+                  >front-end development, React.js & javascript!</span
+                >
+              </p>
+              <p style="margin-bottom: 30px">
+                → Here are my most frequently used
+              </p>
+
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 40px;
+                  max-width: 800px;
+                  margin: 0 auto;
+                "
+              >
+                <div>
+                  <h3
+                    style="
+                      font-size: 20px;
+                      margin-bottom: 20px;
+                      text-align: center;
+                    "
+                  >
+                    Languages & Tools
+                  </h3>
+                  <div
+                    style="
+                      display: flex;
+                      flex-wrap: wrap;
+                      gap: 10px;
+                      justify-content: center;
+                    "
+                  >
+                    <span
+                      style="
+                        background: #f0db4f;
+                        color: #000;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >JavaScript</span
+                    >
+                    <span
+                      style="
+                        background: #00599c;
+                        color: #fff;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >C++</span
+                    >
+                    <span
+                      style="
+                        background: #3776ab;
+                        color: #fff;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >Python</span
+                    >
+                    <span
+                      style="
+                        background: #e34c26;
+                        color: #fff;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >HTML5</span
+                    >
+                    <span
+                      style="
+                        background: #cc6699;
+                        color: #fff;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >Sass</span
+                    >
+                    <span
+                      style="
+                        background: #f34f29;
+                        color: #fff;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >Git</span
+                    >
+                    <span
+                      style="
+                        background: #ffa611;
+                        color: #000;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >Firebase</span
+                    >
+                  </div>
+                </div>
+                <div>
+                  <h3
+                    style="
+                      font-size: 20px;
+                      margin-bottom: 20px;
+                      text-align: center;
+                    "
+                  >
+                    Frameworks & Libraries
+                  </h3>
+                  <div
+                    style="
+                      display: flex;
+                      flex-wrap: wrap;
+                      gap: 10px;
+                      justify-content: center;
+                    "
+                  >
+                    <span
+                      style="
+                        background: #000;
+                        color: #fff;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >Next</span
+                    >
+                    <span
+                      style="
+                        background: #61dafb;
+                        color: #000;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >React</span
+                    >
+                    <span
+                      style="
+                        background: #02569b;
+                        color: #fff;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >Flutter</span
+                    >
+                    <span
+                      style="
+                        background: #38bdf8;
+                        color: #000;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >Tailwind CSS</span
+                    >
+                    <span
+                      style="
+                        background: #68a063;
+                        color: #fff;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >Node.js</span
+                    >
+                    <span
+                      style="
+                        background: #0769ad;
+                        color: #fff;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >jQuery</span
+                    >
+                    <span
+                      style="
+                        background: #764abc;
+                        color: #fff;
+                        padding: 8px 14px;
+                        border-radius: 6px;
+                        font-size: 12px;
+                        font-weight: 600;
+                      "
+                      >Redux</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <p style="margin-top: 30px; text-align: center">
+                → And of course,
+                <span
+                  style="
+                    background: #0078d4;
+                    color: #fff;
+                    padding: 4px 10px;
+                    border-radius: 4px;
+                    font-weight: 600;
+                  "
+                  >Linux</span
+                >
+                !
+              </p>
+            </div>
+
+            <div class="portfolio-section" id="section-education">
+              <h1
+                style="font-size: 28px; margin-bottom: 10px; text-align: center"
+              >
+                Education
+              </h1>
+              <div
+                style="
+                  width: 200px;
+                  height: 2px;
+                  background: linear-gradient(
+                    90deg,
+                    transparent,
+                    #667eea,
+                    transparent
+                  );
+                  margin: 20px auto 40px;
+                "
+              ></div>
+
+              <div style="max-width: 700px; margin: 0 auto">
+                <div
+                  style="
+                    background: rgba(102, 126, 234, 0.1);
+                    padding: 25px;
+                    border-radius: 12px;
+                    border-left: 4px solid #667eea;
+                    margin-bottom: 20px;
+                  "
+                >
+                  <h3 style="font-size: 20px; margin-bottom: 10px">
+                    🎓 Computer Science
+                  </h3>
+                  <p style="opacity: 0.8; margin-bottom: 8px">
+                    Currently Pursuing
+                  </p>
+                  <p style="line-height: 1.6">
+                    Focused on web development, data structures, algorithms, and
+                    modern software engineering practices.
+                  </p>
+                </div>
+
+                <div
+                  style="
+                    background: rgba(102, 126, 234, 0.1);
+                    padding: 25px;
+                    border-radius: 12px;
+                    border-left: 4px solid #667eea;
+                  "
+                >
+                  <h3 style="font-size: 20px; margin-bottom: 10px">
+                    💼 Experience
+                  </h3>
+                  <p style="opacity: 0.8; margin-bottom: 8px">
+                    Building Real-World Projects
+                  </p>
+                  <p style="line-height: 1.6">
+                    Hands-on experience with React, Node.js, and modern web
+                    technologies through various personal and academic projects.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="portfolio-section" id="section-projects">
+              <h1
+                style="font-size: 28px; margin-bottom: 10px; text-align: center"
+              >
+                My Projects
+              </h1>
+              <div
+                style="
+                  width: 200px;
+                  height: 2px;
+                  background: linear-gradient(
+                    90deg,
+                    transparent,
+                    #667eea,
+                    transparent
+                  );
+                  margin: 20px auto 40px;
+                "
+              ></div>
+
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                  gap: 20px;
+                "
+              >
+                <div
+                  style="
+                    background: rgba(102, 126, 234, 0.1);
+                    padding: 20px;
+                    border-radius: 12px;
+                    transition: transform 0.2s;
+                  "
+                >
+                  <div style="font-size: 40px; margin-bottom: 15px">🌐</div>
+                  <h3 style="font-size: 18px; margin-bottom: 10px">
+                    Portfolio Website
+                  </h3>
+                  <p style="opacity: 0.8; line-height: 1.6; font-size: 14px">
+                    A modern macOS-style portfolio showcasing my skills and
+                    projects.
+                  </p>
+                  <div
+                    style="
+                      margin-top: 15px;
+                      display: flex;
+                      gap: 8px;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <span
+                      style="
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 4px 10px;
+                        border-radius: 4px;
+                        font-size: 11px;
+                      "
+                      >HTML</span
+                    >
+                    <span
+                      style="
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 4px 10px;
+                        border-radius: 4px;
+                        font-size: 11px;
+                      "
+                      >CSS</span
+                    >
+                    <span
+                      style="
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 4px 10px;
+                        border-radius: 4px;
+                        font-size: 11px;
+                      "
+                      >JavaScript</span
+                    >
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background: rgba(102, 126, 234, 0.1);
+                    padding: 20px;
+                    border-radius: 12px;
+                    transition: transform 0.2s;
+                  "
+                >
+                  <div style="font-size: 40px; margin-bottom: 15px">⚛️</div>
+                  <h3 style="font-size: 18px; margin-bottom: 10px">
+                    React Applications
+                  </h3>
+                  <p style="opacity: 0.8; line-height: 1.6; font-size: 14px">
+                    Various React projects including todo apps, weather apps,
+                    and more.
+                  </p>
+                  <div
+                    style="
+                      margin-top: 15px;
+                      display: flex;
+                      gap: 8px;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <span
+                      style="
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 4px 10px;
+                        border-radius: 4px;
+                        font-size: 11px;
+                      "
+                      >React</span
+                    >
+                    <span
+                      style="
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 4px 10px;
+                        border-radius: 4px;
+                        font-size: 11px;
+                      "
+                      >JavaScript</span
+                    >
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    background: rgba(102, 126, 234, 0.1);
+                    padding: 20px;
+                    border-radius: 12px;
+                    transition: transform 0.2s;
+                  "
+                >
+                  <div style="font-size: 40px; margin-bottom: 15px">🎨</div>
+                  <h3 style="font-size: 18px; margin-bottom: 10px">
+                    UI/UX Designs
+                  </h3>
+                  <p style="opacity: 0.8; line-height: 1.6; font-size: 14px">
+                    Modern and responsive design projects with focus on user
+                    experience.
+                  </p>
+                  <div
+                    style="
+                      margin-top: 15px;
+                      display: flex;
+                      gap: 8px;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <span
+                      style="
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 4px 10px;
+                        border-radius: 4px;
+                        font-size: 11px;
+                      "
+                      >CSS</span
+                    >
+                    <span
+                      style="
+                        background: rgba(255, 255, 255, 0.1);
+                        padding: 4px 10px;
+                        border-radius: 4px;
+                        font-size: 11px;
+                      "
+                      >Tailwind</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="portfolio-section" id="section-resume">
+              <h1
+                style="font-size: 28px; margin-bottom: 10px; text-align: center"
+              >
+                Resume
+              </h1>
+              <div
+                style="
+                  width: 200px;
+                  height: 2px;
+                  background: linear-gradient(
+                    90deg,
+                    transparent,
+                    #667eea,
+                    transparent
+                  );
+                  margin: 20px auto 40px;
+                "
+              ></div>
+
+              <div style="max-width: 600px; margin: 0 auto; text-align: center">
+                <p style="margin-bottom: 30px; line-height: 1.8">
+                  Download my resume to learn more about my experience, skills,
+                  and projects.
+                </p>
+                <button
+                  style="
+                    background: linear-gradient(
+                      135deg,
+                      #667eea 0%,
+                      #764ba2 100%
+                    );
+                    color: white;
+                    border: none;
+                    padding: 15px 40px;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    font-weight: 600;
+                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                  "
+                >
+                  📄 Download Resume
+                </button>
+                <div
+                  style="
+                    margin-top: 40px;
+                    padding: 20px;
+                    background: rgba(102, 126, 234, 0.1);
+                    border-radius: 12px;
+                  "
+                >
+                  <h3 style="margin-bottom: 15px">Quick Links</h3>
+                  <div
+                    style="
+                      display: flex;
+                      gap: 15px;
+                      justify-content: center;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <a
+                      href="https://github.com/devchauhann"
+                      style="
+                        color: #667eea;
+                        text-decoration: none;
+                        padding: 8px 16px;
+                        background: rgba(255, 255, 255, 0.1);
+                        border-radius: 6px;
+                      "
+                      >GitHub</a
+                    >
+                    <a
+                      href="mailto:devgurjar9897@gmail.com"
+                      style="
+                        color: #667eea;
+                        text-decoration: none;
+                        padding: 8px 16px;
+                        background: rgba(255, 255, 255, 0.1);
+                        border-radius: 6px;
+                      "
+                      >Email</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div
+        class="window"
+        id="safari-window"
+        style="width: 1000px; height: 700px; top: 100px; left: 150px"
+      >
+        <div class="window-header">
+          <div class="window-controls">
+            <div
+              class="window-control close"
+              onclick="closeWindow('safari-window')"
+            ></div>
+            <div
+              class="window-control minimize"
+              onclick="minimizeWindow('safari-window')"
+            ></div>
+            <div
+              class="window-control maximize"
+              onclick="maximizeWindow('safari-window')"
+            ></div>
+          </div>
+          <div class="window-title">Safari</div>
+        </div>
+        <div class="window-content">
+          <div class="safari-toolbar">
+            <button class="safari-btn">◀</button>
+            <button class="safari-btn">▶</button>
+            <input
+              type="text"
+              class="safari-url"
+              id="safari-url"
+              placeholder="Search or enter website name"
+              value="https://google.com"
+            />
+            <button class="safari-btn" id="safari-go">Go</button>
+          </div>
+          <iframe
+            class="safari-frame"
+            id="safari-frame"
+            src="about:blank"
+          ></iframe>
+        </div>
+      </div>
+
+      <div
+        class="window"
+        id="calculator-window"
+        style="width: 320px; height: 520px; top: 120px; left: 200px"
+      >
+        <div class="window-header">
+          <div class="window-controls">
+            <div
+              class="window-control close"
+              onclick="closeWindow('calculator-window')"
+            ></div>
+            <div
+              class="window-control minimize"
+              onclick="minimizeWindow('calculator-window')"
+            ></div>
+            <div
+              class="window-control maximize"
+              onclick="maximizeWindow('calculator-window')"
+            ></div>
+          </div>
+          <div class="window-title"></div>
+        </div>
+        <div class="window-content" id="calculator-content">
+          <div class="calc-display" id="calc-display">0</div>
+          <div class="calc-buttons">
+            <button class="calc-btn func" onclick="clearCalc()">AC</button>
+            <button class="calc-btn func" onclick="toggleSign()">+/-</button>
+            <button class="calc-btn func" onclick="inputPercent()">%</button>
+            <button class="calc-btn op" onclick="inputOp('/')">÷</button>
+            <button class="calc-btn num" onclick="inputNum('7')">7</button>
+            <button class="calc-btn num" onclick="inputNum('8')">8</button>
+            <button class="calc-btn num" onclick="inputNum('9')">9</button>
+            <button class="calc-btn op" onclick="inputOp('*')">×</button>
+            <button class="calc-btn num" onclick="inputNum('4')">4</button>
+            <button class="calc-btn num" onclick="inputNum('5')">5</button>
+            <button class="calc-btn num" onclick="inputNum('6')">6</button>
+            <button class="calc-btn op" onclick="inputOp('-')">−</button>
+            <button class="calc-btn num" onclick="inputNum('1')">1</button>
+            <button class="calc-btn num" onclick="inputNum('2')">2</button>
+            <button class="calc-btn num" onclick="inputNum('3')">3</button>
+            <button class="calc-btn op" onclick="inputOp('+')">+</button>
+            <button class="calc-btn num zero" onclick="inputNum('0')">0</button>
+            <button class="calc-btn num" onclick="inputNum('.')">.</button>
+            <button class="calc-btn op" onclick="inputEquals()">=</button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="window"
+        id="settings-window"
+        style="width: 800px; height: 600px; top: 140px; left: 250px"
+      >
+        <div class="window-header">
+          <div class="window-controls">
+            <div
+              class="window-control close"
+              onclick="closeWindow('settings-window')"
+            ></div>
+            <div
+              class="window-control minimize"
+              onclick="minimizeWindow('settings-window')"
+            ></div>
+            <div
+              class="window-control maximize"
+              onclick="maximizeWindow('settings-window')"
+            ></div>
+          </div>
+          <div class="window-title">System Settings</div>
+        </div>
+        <div class="window-content" id="settings-content">
+          <div class="settings-sidebar">
+            <div class="settings-item active" data-section="wallpaper">
+              Wallpaper
+            </div>
+            <div class="settings-item" data-section="appearance">
+              Appearance
+            </div>
+            <div class="settings-item" data-section="colors">Color Palette</div>
+            <div class="settings-item" data-section="accent">Accent Color</div>
+            <div class="settings-item" data-section="theme">Theme</div>
+            <div class="settings-item" data-section="effects">
+              Visual Effects
+            </div>
+          </div>
+          <div class="settings-main">
+            <div class="settings-section active" id="section-wallpaper">
+              <h3>Desktop & Screen Saver</h3>
+              <p style="margin-bottom: 20px; opacity: 0.7">
+                Choose your desktop wallpaper
+              </p>
+              <div class="wallpaper-grid" id="wallpaper-grid"></div>
+            </div>
+
+            <div class="settings-section" id="section-appearance">
+              <h3>Appearance</h3>
+              <p style="margin-bottom: 20px; opacity: 0.7">
+                Customize the overall look and feel
+              </p>
+              <div class="settings-option">
+                <label>Interface Style</label>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" name="interface" value="auto" checked />
+                    <span>Auto</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="interface" value="light" />
+                    <span>Light</span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" name="interface" value="dark" />
+                    <span>Dark</span>
+                  </label>
+                </div>
+              </div>
+              <div class="settings-option">
+                <label>Sidebar Icon Size</label>
+                <div class="slider-container">
+                  <span>Small</span>
+                  <input
+                    type="range"
+                    class="settings-slider"
+                    min="12"
+                    max="24"
+                    value="18"
+                  />
+                  <span>Large</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section" id="section-colors">
+              <h3>Color Palette</h3>
+              <p style="margin-bottom: 20px; opacity: 0.7">
+                Choose your preferred color scheme
+              </p>
+              <div class="color-palette-grid">
+                <div class="color-palette active" data-palette="default">
+                  <div class="palette-preview">
+                    <div style="background: #007aff"></div>
+                    <div style="background: #34c759"></div>
+                    <div style="background: #ff9500"></div>
+                    <div style="background: #ff3b30"></div>
+                  </div>
+                  <span>Default</span>
+                </div>
+                <div class="color-palette" data-palette="sunset">
+                  <div class="palette-preview">
+                    <div style="background: #ff6b6b"></div>
+                    <div style="background: #4ecdc4"></div>
+                    <div style="background: #45b7d1"></div>
+                    <div style="background: #ffa07a"></div>
+                  </div>
+                  <span>Sunset</span>
+                </div>
+                <div class="color-palette" data-palette="forest">
+                  <div class="palette-preview">
+                    <div style="background: #2ecc71"></div>
+                    <div style="background: #27ae60"></div>
+                    <div style="background: #16a085"></div>
+                    <div style="background: #1abc9c"></div>
+                  </div>
+                  <span>Forest</span>
+                </div>
+                <div class="color-palette" data-palette="ocean">
+                  <div class="palette-preview">
+                    <div style="background: #3498db"></div>
+                    <div style="background: #2980b9"></div>
+                    <div style="background: #1abc9c"></div>
+                    <div style="background: #16a085"></div>
+                  </div>
+                  <span>Ocean</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section" id="section-accent">
+              <h3>Accent Color</h3>
+              <p style="margin-bottom: 20px; opacity: 0.7">
+                Choose an accent color for buttons and highlights
+              </p>
+              <div class="accent-colors">
+                <div
+                  class="accent-color active"
+                  style="background: #007aff"
+                  data-color="#007AFF"
+                ></div>
+                <div
+                  class="accent-color"
+                  style="background: #5856d6"
+                  data-color="#5856D6"
+                ></div>
+                <div
+                  class="accent-color"
+                  style="background: #af52de"
+                  data-color="#AF52DE"
+                ></div>
+                <div
+                  class="accent-color"
+                  style="background: #ff2d92"
+                  data-color="#FF2D92"
+                ></div>
+                <div
+                  class="accent-color"
+                  style="background: #ff3b30"
+                  data-color="#FF3B30"
+                ></div>
+                <div
+                  class="accent-color"
+                  style="background: #ff9500"
+                  data-color="#FF9500"
+                ></div>
+                <div
+                  class="accent-color"
+                  style="background: #ffcc00"
+                  data-color="#FFCC00"
+                ></div>
+                <div
+                  class="accent-color"
+                  style="background: #34c759"
+                  data-color="#34C759"
+                ></div>
+                <div
+                  class="accent-color"
+                  style="background: #00c7be"
+                  data-color="#00C7BE"
+                ></div>
+                <div
+                  class="accent-color"
+                  style="background: #8e8e93"
+                  data-color="#8E8E93"
+                ></div>
+              </div>
+            </div>
+
+            <div class="settings-section" id="section-theme">
+              <h3>Theme</h3>
+              <p style="margin-bottom: 20px; opacity: 0.7">
+                Choose a theme for your desktop
+              </p>
+              <div class="theme-grid">
+                <div class="theme-option active" data-theme="default">
+                  <div
+                    class="theme-preview"
+                    style="
+                      background: linear-gradient(
+                        135deg,
+                        #667eea 0%,
+                        #764ba2 100%
+                      );
+                    "
+                  ></div>
+                  <span>Default</span>
+                </div>
+                <div class="theme-option" data-theme="minimal">
+                  <div
+                    class="theme-preview"
+                    style="
+                      background: linear-gradient(
+                        135deg,
+                        #f5f7fa 0%,
+                        #c3cfe2 100%
+                      );
+                    "
+                  ></div>
+                  <span>Minimal</span>
+                </div>
+                <div class="theme-option" data-theme="dark">
+                  <div
+                    class="theme-preview"
+                    style="
+                      background: linear-gradient(
+                        135deg,
+                        #232526 0%,
+                        #414345 100%
+                      );
+                    "
+                  ></div>
+                  <span>Dark Pro</span>
+                </div>
+                <div class="theme-option" data-theme="vibrant">
+                  <div
+                    class="theme-preview"
+                    style="
+                      background: linear-gradient(
+                        135deg,
+                        #ff9a9e 0%,
+                        #fecfef 50%,
+                        #fecfef 100%
+                      );
+                    "
+                  ></div>
+                  <span>Vibrant</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section" id="section-effects">
+              <h3>Visual Effects</h3>
+              <p style="margin-bottom: 20px; opacity: 0.7">
+                Control visual effects and animations
+              </p>
+              <div class="settings-option">
+                <label> <input type="checkbox" checked /> Reduce Motion </label>
+              </div>
+              <div class="settings-option">
+                <label>
+                  <input type="checkbox" checked /> Transparency Effects
+                </label>
+              </div>
+              <div class="settings-option">
+                <label> <input type="checkbox" /> High Contrast </label>
+              </div>
+              <div class="settings-option">
+                <label>Window Animation Speed</label>
+                <div class="slider-container">
+                  <span>Slow</span>
+                  <input
+                    type="range"
+                    class="settings-slider"
+                    min="0.5"
+                    max="2"
+                    step="0.1"
+                    value="1"
+                  />
+                  <span>Fast</span>
+                </div>
+              </div>
+              <div class="settings-option">
+                <label>Blur Intensity</label>
+                <div class="slider-container">
+                  <span>Low</span>
+                  <input
+                    type="range"
+                    class="settings-slider"
+                    min="5"
+                    max="40"
+                    value="20"
+                  />
+                  <span>High</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="window"
+        id="terminal-window"
+        style="width: 700px; height: 500px; top: 160px; left: 300px"
+      >
+        <div class="window-header">
+          <div class="window-controls">
+            <div
+              class="window-control close"
+              onclick="closeWindow('terminal-window')"
+            ></div>
+            <div
+              class="window-control minimize"
+              onclick="minimizeWindow('terminal-window')"
+            ></div>
+            <div
+              class="window-control maximize"
+              onclick="maximizeWindow('terminal-window')"
+            ></div>
+          </div>
+          <div class="window-title">Terminal</div>
+        </div>
+        <div class="window-content" id="terminal-content">
+          <div id="terminal-output">
+            <span class="terminal-prompt">dev@mac ~ %</span>
+            <input
+              type="text"
+              class="terminal-input"
+              id="terminal-input"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="window"
+        id="spotify-window"
+        style="width: 800px; height: 600px; top: 100px; left: 200px"
+      >
+        <div class="window-header">
+          <div class="window-controls">
+            <div
+              class="window-control close"
+              onclick="closeWindow('spotify-window')"
+            ></div>
+            <div
+              class="window-control minimize"
+              onclick="minimizeWindow('spotify-window')"
+            ></div>
+            <div
+              class="window-control maximize"
+              onclick="maximizeWindow('spotify-window')"
+            ></div>
+          </div>
+          <div class="window-title">Spotify</div>
+        </div>
+        <div class="window-content" style="padding: 0">
+          <iframe
+            style="border-radius: 0; width: 100%; height: 100%; border: none"
+            src="https://open.spotify.com/embed/playlist/37i9dQZEVXbLZ52XmnySJg"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+
+      <div
+        class="window"
+        id="vscode-window"
+        style="width: 1000px; height: 700px; top: 80px; left: 150px"
+      >
+        <div class="window-header">
+          <div class="window-controls">
+            <div
+              class="window-control close"
+              onclick="closeWindow('vscode-window')"
+            ></div>
+            <div
+              class="window-control minimize"
+              onclick="minimizeWindow('vscode-window')"
+            ></div>
+            <div
+              class="window-control maximize"
+              onclick="maximizeWindow('vscode-window')"
+            ></div>
+          </div>
+          <div class="window-title">VS Code</div>
+        </div>
+        <div class="window-content" style="padding: 0">
+          <iframe
+            style="border: none; width: 100%; height: 100%"
+            src="https://github1s.com/devchauhann/devchauhann.github.io/blob/HEAD/index.html"
+          ></iframe>
+        </div>
+      </div>
+
+      <div
+        class="window"
+        id="chrome-window"
+        style="width: 1000px; height: 700px; top: 100px; left: 180px"
+      >
+        <div class="window-header">
+          <div class="window-controls">
+            <div
+              class="window-control close"
+              onclick="closeWindow('chrome-window')"
+            ></div>
+            <div
+              class="window-control minimize"
+              onclick="minimizeWindow('chrome-window')"
+            ></div>
+            <div
+              class="window-control maximize"
+              onclick="maximizeWindow('chrome-window')"
+            ></div>
+          </div>
+          <div class="window-title">Chrome</div>
+        </div>
+        <div class="window-content">
+          <div class="safari-toolbar">
+            <button class="safari-btn">◀</button>
+            <button class="safari-btn">▶</button>
+            <input
+              type="text"
+              class="safari-url"
+              id="chrome-url"
+              placeholder="Search Google or type a URL"
+              value="https://www.google.com/webhp?igu=1"
+            />
+            <button class="safari-btn" id="chrome-go">Go</button>
+          </div>
+          <iframe
+            class="safari-frame"
+            id="chrome-frame"
+            src="https://www.google.com/webhp?igu=1"
+          ></iframe>
+        </div>
+      </div>
+
+      <div id="dock">
+        <div class="dock-item" data-app="finder" title="Finder">
+          <img
+            src="icon/finder.png"
+            alt="Finder"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 12px;
+            "
+            onerror="this.style.display='none'; this.parentElement.innerHTML='🗂️';"
+          />
+        </div>
+        <div class="dock-item" data-app="safari" title="Safari">
+          <img
+            src="icon/safari.png"
+            alt="Safari"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 12px;
+            "
+            onerror="this.style.display='none'; this.parentElement.innerHTML='🧭';"
+          />
+        </div>
+        <div class="dock-item" data-app="calculator" title="Calculator">
+          <img
+            src="icon/calculator.png"
+            alt="Calculator"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 12px;
+            "
+            onerror="this.style.display='none'; this.parentElement.innerHTML='🔢';"
+          />
+        </div>
+        <div class="dock-item" data-app="settings" title="Settings">
+          <img
+            src="icon/settings.png"
+            alt="Settings"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 12px;
+            "
+            onerror="this.style.display='none'; this.parentElement.innerHTML='⚙️';"
+          />
+        </div>
+        <div class="dock-item" data-app="terminal" title="Terminal">
+          <img
+            src="icon/terminal.png"
+            alt="Terminal"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 12px;
+            "
+            onerror="this.style.display='none'; this.parentElement.innerHTML='⌨️';"
+          />
+        </div>
+        <div class="dock-item" data-app="spotify" title="Spotify">
+          <img
+            src="icon/spotify.png"
+            alt="Spotify"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 12px;
+            "
+            onerror="this.style.display='none'; this.parentElement.innerHTML='🎵';"
+          />
+        </div>
+        <div class="dock-item" data-app="vscode" title="VS Code">
+          <img
+            src="icon/vscode.png"
+            alt="VS Code"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 12px;
+            "
+            onerror="this.style.display='none'; this.parentElement.innerHTML='💻';"
+          />
+        </div>
+        <div class="dock-item" data-app="chrome" title="Chrome">
+          <img
+            src="icon/chrome.png"
+            alt="Chrome"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 12px;
+            "
+            onerror="this.style.display='none'; this.parentElement.innerHTML='🌐';"
+          />
+        </div>
+      </div>
     </div>
 
     <script>
-        const state = {
-            currentWallpaper: 0,
-            calcValue: '0',
-            calcOperator: null,
-            calcPrevValue: null,
-            calcWaitingForOperand: false,
-            minimizedWindows: {}
+      const state = {
+        currentWallpaper: 0,
+        calcValue: "0",
+        calcOperator: null,
+        calcPrevValue: null,
+        calcWaitingForOperand: false,
+        minimizedWindows: {},
+        isLocked: true,
+        brightness: 75,
+        volume: 50,
+      };
+
+      const wallpapers = [
+        "wallpaper/wallpaper1.png",
+        "wallpaper/wallpaper2.png",
+        "wallpaper/wallpaper3.png",
+        "wallpaper/wallpaper4.png",
+        "wallpaper/wallpaper5.png",
+      ];
+
+      function init() {
+        updateTime();
+        setInterval(updateTime, 1000);
+        setWallpaper(0);
+        initDock();
+        initWindows();
+        initFinder();
+        initWidget();
+        initLockScreen();
+        initControlCenter();
+        initAppleMenu();
+        initSettings();
+        initTerminal();
+      }
+
+      function initTerminal() {
+        const terminalInput = document.getElementById("terminal-input");
+        const output = document.getElementById("terminal-output");
+
+        if (terminalInput) {
+          terminalInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+              const cmd = terminalInput.value.trim();
+              if (cmd) {
+                executeCommand(cmd, output);
+                terminalInput.value = "";
+              }
+            }
+          });
+        }
+      }
+
+      function updateTime() {
+        const now = new Date();
+        const timeStrWithAMPM = now.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
+        const timeStrWithoutAMPM = now.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
+        const dateStr = now.toLocaleDateString("en-US", {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+        });
+        const fullDateStr = now.toLocaleDateString("en-US", {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        });
+        document.getElementById(
+          "menu-time"
+        ).textContent = `${dateStr} ${timeStrWithAMPM}`;
+        document.getElementById("widget-time").textContent = timeStrWithAMPM;
+        document.getElementById("widget-date").textContent = fullDateStr;
+
+        document.getElementById("lock-time").textContent = timeStrWithoutAMPM;
+        document.getElementById("lock-date").textContent = fullDateStr.replace(
+          /,.*$/,
+          ""
+        );
+      }
+
+      function setWallpaper(index) {
+        state.currentWallpaper = index;
+        const desktop = document.getElementById("desktop");
+        const lockscreen = document.getElementById("lockscreen");
+        const img = new Image();
+        img.src = wallpapers[index];
+        img.onload = function () {
+          desktop.style.backgroundImage = `url('${wallpapers[index]}')`;
+          lockscreen.style.backgroundImage = `url('${wallpapers[index]}')`;
+        };
+        img.onerror = function () {
+          const gradient = `linear-gradient(135deg, hsl(${
+            index * 72
+          }, 70%, 50%), hsl(${index * 72 + 60}, 60%, 40%))`;
+          desktop.style.background = gradient;
+          desktop.style.backgroundImage = "";
+          lockscreen.style.background = gradient;
+          lockscreen.style.backgroundImage = "";
+        };
+      }
+
+      function initLockScreen() {
+        const lockPassword = document.getElementById("lock-password");
+        lockPassword.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            unlockScreen();
+          }
+        });
+      }
+
+      function lockScreen() {
+        state.isLocked = true;
+        document.getElementById("lockscreen").classList.remove("hidden");
+        document.getElementById("lock-password").value = "";
+        closeAppleMenu();
+      }
+
+      function unlockScreen() {
+        state.isLocked = false;
+        document.getElementById("lockscreen").classList.add("hidden");
+      }
+
+      function initAppleMenu() {
+        document.getElementById("apple-logo").addEventListener("click", (e) => {
+          e.stopPropagation();
+          const menu = document.getElementById("apple-menu");
+          menu.classList.toggle("active");
+        });
+
+        document.addEventListener("click", (e) => {
+          const menu = document.getElementById("apple-menu");
+          if (
+            !menu.contains(e.target) &&
+            !document.getElementById("apple-logo").contains(e.target)
+          ) {
+            closeAppleMenu();
+          }
+        });
+      }
+
+      function closeAppleMenu() {
+        document.getElementById("apple-menu").classList.remove("active");
+      }
+
+      function showShutdownModal(type) {
+        const modal = document.getElementById("shutdown-modal");
+        const icon = document.getElementById("shutdown-icon");
+        const title = document.getElementById("shutdown-title");
+        const confirm = document.getElementById("shutdown-confirm");
+
+        closeAppleMenu();
+
+        if (type === "sleep") {
+          icon.textContent = "😴";
+          title.textContent =
+            "Are you sure you want to put your computer to sleep?";
+          confirm.textContent = "Sleep";
+        } else if (type === "restart") {
+          icon.textContent = "🔄";
+          title.textContent =
+            "Are you sure you want to restart your computer now?";
+          confirm.textContent = "Restart";
+        } else {
+          icon.textContent = "⏻";
+          title.textContent =
+            "Are you sure you want to shut down your computer now?";
+          confirm.textContent = "Shut Down";
+        }
+
+        confirm.onclick = () => {
+          if (type === "sleep") {
+            lockScreen();
+          } else {
+            lockScreen();
+          }
+          closeShutdownModal();
         };
 
-        const wallpapers = ['wallpaper1.png', 'wallpaper2.png', 'wallpaper3.png', 'wallpaper4.png', 'wallpaper5.png'];
+        modal.classList.add("active");
+      }
 
-        function init() {
-            updateTime();
-            setInterval(updateTime, 1000);
-            loadWallpapers();
-            setWallpaper(0);
-            initDock();
-            initWindows();
-            initSafari();
-            initTerminal();
-            initFinder();
-            initWidget();
+      function closeShutdownModal() {
+        document.getElementById("shutdown-modal").classList.remove("active");
+      }
+
+      function initControlCenter() {
+        const ccToggle = document.getElementById("cc-toggle");
+        const cc = document.getElementById("control-center");
+
+        ccToggle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          cc.classList.toggle("active");
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!cc.contains(e.target) && !ccToggle.contains(e.target)) {
+            cc.classList.remove("active");
+          }
+        });
+
+        const brightnessSlider = document.getElementById("brightness-slider");
+        const volumeSlider = document.getElementById("volume-slider");
+
+        brightnessSlider.addEventListener("input", (e) => {
+          state.brightness = e.target.value;
+          const overlay = document.getElementById("brightness-overlay");
+          if (!overlay) {
+            const div = document.createElement("div");
+            div.id = "brightness-overlay";
+            div.style.cssText =
+              "position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:99997;transition:background 0.2s;";
+            document.body.appendChild(div);
+          }
+          document.getElementById(
+            "brightness-overlay"
+          ).style.background = `rgba(0,0,0,${(100 - state.brightness) / 100})`;
+        });
+
+        volumeSlider.addEventListener("input", (e) => {
+          state.volume = e.target.value;
+        });
+
+        document.querySelectorAll(".cc-item").forEach((item) => {
+          item.addEventListener("click", () => {
+            item.classList.toggle("active");
+          });
+        });
+      }
+
+      function openApp(app) {
+        const windowId = `${app}-window`;
+        const window = document.getElementById(windowId);
+        if (state.minimizedWindows[windowId]) {
+          window.classList.remove("minimizing");
+          window.classList.add("active");
+          state.minimizedWindows[windowId] = false;
+          updateDockIndicators();
+          bringToFront(window);
+        } else if (window.classList.contains("active")) {
+          bringToFront(window);
+        } else {
+          window.classList.add("active");
+          bringToFront(window);
         }
+      }
 
-        function updateTime() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-            const dateStr = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-            const fullDateStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-            document.getElementById('menu-time').textContent = `${dateStr} ${timeStr}`;
-            document.getElementById('widget-time').textContent = timeStr;
-            document.getElementById('widget-date').textContent = fullDateStr;
+      function initDock() {
+        document.querySelectorAll(".dock-item").forEach((item) => {
+          item.addEventListener("click", () => {
+            openApp(item.dataset.app);
+          });
+        });
+      }
+
+      function initWindows() {
+        document.querySelectorAll(".window").forEach(makeWindowDraggable);
+      }
+
+      function closeWindow(windowId) {
+        const window = document.getElementById(windowId);
+        window.classList.remove("active");
+        state.minimizedWindows[windowId] = false;
+        updateDockIndicators();
+      }
+
+      function minimizeWindow(windowId) {
+        const window = document.getElementById(windowId);
+        window.classList.add("minimizing");
+        setTimeout(() => {
+          window.classList.remove("active");
+          window.classList.remove("minimizing");
+          state.minimizedWindows[windowId] = true;
+          updateDockIndicators();
+        }, 500);
+      }
+
+      function maximizeWindow(windowId) {
+        const window = document.getElementById(windowId);
+        const isMaximized = window.dataset.maximized === "true";
+        if (isMaximized) {
+          window.style.width = window.dataset.origWidth;
+          window.style.height = window.dataset.origHeight;
+          window.style.top = window.dataset.origTop;
+          window.style.left = window.dataset.origLeft;
+          window.dataset.maximized = "false";
+        } else {
+          window.dataset.origWidth = window.style.width;
+          window.dataset.origHeight = window.style.height;
+          window.dataset.origTop = window.style.top;
+          window.dataset.origLeft = window.style.left;
+          window.style.width = "100vw";
+          window.style.height = "calc(100vh - 32px)";
+          window.style.top = "24px";
+          window.style.left = "0";
+          window.dataset.maximized = "true";
         }
+      }
 
-        function loadWallpapers() {
-            const grid = document.getElementById('wallpaper-grid');
-            grid.innerHTML = '';
-            wallpapers.forEach((wallpaper, index) => {
-                const item = document.createElement('div');
-                item.className = 'wallpaper-item' + (index === state.currentWallpaper ? ' active' : '');
-                item.onclick = () => setWallpaper(index);
-                const img = document.createElement('img');
-                img.src = wallpaper;
-                img.alt = `Wallpaper ${index + 1}`;
-                img.onerror = function() {
-                    this.style.display = 'none';
-                    const fallback = document.createElement('div');
-                    fallback.style.cssText = `width:100%;height:100%;background:linear-gradient(135deg, hsl(${index * 72}, 70%, 50%), hsl(${index * 72 + 60}, 60%, 40%))`;
-                    this.parentElement.appendChild(fallback);
-                };
-                item.appendChild(img);
-                const label = document.createElement('div');
-                label.className = 'wallpaper-label';
-                label.textContent = `Wallpaper ${index + 1}`;
-                item.appendChild(label);
-                grid.appendChild(item);
+      function updateDockIndicators() {
+        document.querySelectorAll(".dock-item").forEach((item) => {
+          const app = item.dataset.app;
+          const windowId = `${app}-window`;
+          item.classList.toggle(
+            "minimized",
+            state.minimizedWindows[windowId] === true
+          );
+        });
+      }
+
+      function bringToFront(window) {
+        document.querySelectorAll(".window").forEach((w) => {
+          w.style.zIndex = "1000";
+        });
+        window.style.zIndex = "1001";
+      }
+
+      function makeWindowDraggable(window) {
+        const header = window.querySelector(".window-header");
+        let isDragging = false;
+        let currentX, currentY, initialX, initialY;
+        header.addEventListener("mousedown", dragStart);
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", dragEnd);
+        function dragStart(e) {
+          if (e.target.classList.contains("window-control")) return;
+          initialX = e.clientX - window.offsetLeft;
+          initialY = e.clientY - window.offsetTop;
+          isDragging = true;
+          bringToFront(window);
+        }
+        function drag(e) {
+          if (!isDragging) return;
+          e.preventDefault();
+          currentX = e.clientX - initialX;
+          currentY = e.clientY - initialY;
+          window.style.left = currentX + "px";
+          window.style.top = Math.max(24, currentY) + "px";
+        }
+        function dragEnd() {
+          isDragging = false;
+        }
+      }
+
+      function inputNum(num) {
+        if (state.calcWaitingForOperand) {
+          state.calcValue = num;
+          state.calcWaitingForOperand = false;
+        } else {
+          state.calcValue =
+            state.calcValue === "0" ? num : state.calcValue + num;
+        }
+        updateDisplay();
+      }
+
+      function inputOp(op) {
+        const inputValue = parseFloat(state.calcValue);
+        if (state.calcPrevValue === null) {
+          state.calcPrevValue = inputValue;
+        } else if (state.calcOperator) {
+          const result = calculate(
+            state.calcPrevValue,
+            inputValue,
+            state.calcOperator
+          );
+          state.calcValue = String(result);
+          state.calcPrevValue = result;
+        }
+        state.calcWaitingForOperand = true;
+        state.calcOperator = op;
+        updateDisplay();
+      }
+
+      function inputEquals() {
+        const inputValue = parseFloat(state.calcValue);
+        if (state.calcPrevValue !== null && state.calcOperator) {
+          const result = calculate(
+            state.calcPrevValue,
+            inputValue,
+            state.calcOperator
+          );
+          state.calcValue = String(result);
+          state.calcPrevValue = null;
+          state.calcOperator = null;
+          state.calcWaitingForOperand = true;
+          updateDisplay();
+        }
+      }
+
+      function clearCalc() {
+        state.calcValue = "0";
+        state.calcPrevValue = null;
+        state.calcOperator = null;
+        state.calcWaitingForOperand = false;
+        updateDisplay();
+      }
+
+      function toggleSign() {
+        state.calcValue = String(parseFloat(state.calcValue) * -1);
+        updateDisplay();
+      }
+
+      function inputPercent() {
+        state.calcValue = String(parseFloat(state.calcValue) / 100);
+        updateDisplay();
+      }
+
+      function calculate(a, b, op) {
+        switch (op) {
+          case "+":
+            return a + b;
+          case "-":
+            return a - b;
+          case "*":
+            return a * b;
+          case "/":
+            return a / b;
+          default:
+            return b;
+        }
+      }
+
+      function updateDisplay() {
+        document.getElementById("calc-display").textContent = state.calcValue;
+      }
+
+      function initFinder() {
+        document
+          .querySelectorAll(".finder-item[data-section]")
+          .forEach((item) => {
+            item.addEventListener("click", () => {
+              const section = item.dataset.section;
+              document
+                .querySelectorAll(".finder-item")
+                .forEach((i) => i.classList.remove("active"));
+              item.classList.add("active");
+              document
+                .querySelectorAll(".portfolio-section")
+                .forEach((s) => s.classList.remove("active"));
+              document
+                .getElementById(`section-${section}`)
+                .classList.add("active");
             });
-        }
+          });
+      }
 
-        function setWallpaper(index) {
-            state.currentWallpaper = index;
-            const desktop = document.getElementById('desktop');
-            const img = new Image();
-            img.src = wallpapers[index];
-            img.onload = function() {
-                desktop.style.backgroundImage = `url('${wallpapers[index]}')`;
-            };
-            img.onerror = function() {
-                desktop.style.background = `linear-gradient(135deg, hsl(${index * 72}, 70%, 50%), hsl(${index * 72 + 60}, 60%, 40%))`;
-                desktop.style.backgroundImage = '';
-            };
-            document.querySelectorAll('.wallpaper-item').forEach((item, i) => {
-                item.classList.toggle('active', i === index);
+      function initWidget() {
+        const widget = document.getElementById("desktop-widget");
+        let isDragging = false;
+        let currentX, currentY, initialX, initialY;
+        widget.addEventListener("mousedown", dragStart);
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", dragEnd);
+        function dragStart(e) {
+          initialX = e.clientX - widget.offsetLeft;
+          initialY = e.clientY - widget.offsetTop;
+          isDragging = true;
+        }
+        function drag(e) {
+          if (!isDragging) return;
+          e.preventDefault();
+          currentX = e.clientX - initialX;
+          currentY = e.clientY - initialY;
+          const maxX = window.innerWidth - widget.offsetWidth;
+          const maxY = window.innerHeight - widget.offsetHeight - 80;
+          currentX = Math.max(0, Math.min(currentX, maxX));
+          currentY = Math.max(24, Math.min(currentY, maxY));
+          widget.style.left = currentX + "px";
+          widget.style.top = currentY + "px";
+          widget.style.right = "auto";
+        }
+        function dragEnd() {
+          isDragging = false;
+        }
+      }
+
+      function initSettings() {
+        const wallpaperGrid = document.getElementById("wallpaper-grid");
+
+        // Clear existing content
+        wallpaperGrid.innerHTML = "";
+
+        // Create wallpaper items
+        wallpapers.forEach((wallpaper, index) => {
+          const item = document.createElement("div");
+          item.className = "wallpaper-item";
+          if (index === state.currentWallpaper) {
+            item.classList.add("active");
+          }
+
+          const img = document.createElement("img");
+          img.src = wallpaper;
+          img.alt = `Wallpaper ${index + 1}`;
+          img.onerror = function () {
+            // If image fails to load, create a gradient preview
+            item.style.background = `linear-gradient(135deg, hsl(${
+              index * 72
+            }, 70%, 50%), hsl(${index * 72 + 60}, 60%, 40%))`;
+            item.innerHTML = `<div class="wallpaper-label">Wallpaper ${
+              index + 1
+            }</div>`;
+          };
+
+          const label = document.createElement("div");
+          label.className = "wallpaper-label";
+          label.textContent = `Wallpaper ${index + 1}`;
+
+          item.appendChild(img);
+          item.appendChild(label);
+
+          item.addEventListener("click", () => {
+            // Remove active class from all items
+            document
+              .querySelectorAll(".wallpaper-item")
+              .forEach((w) => w.classList.remove("active"));
+            // Add active class to clicked item
+            item.classList.add("active");
+            // Set the wallpaper
+            setWallpaper(index);
+          });
+
+          wallpaperGrid.appendChild(item);
+        });
+
+        // Settings navigation
+        document
+          .querySelectorAll(".settings-item[data-section]")
+          .forEach((item) => {
+            item.addEventListener("click", () => {
+              const section = item.dataset.section;
+
+              // Update sidebar active state
+              document
+                .querySelectorAll(".settings-item")
+                .forEach((i) => i.classList.remove("active"));
+              item.classList.add("active");
+
+              // Update content section
+              document
+                .querySelectorAll(".settings-section")
+                .forEach((s) => s.classList.remove("active"));
+              document
+                .getElementById(`section-${section}`)
+                .classList.add("active");
             });
-        }
+          });
 
-        function openApp(app) {
-            const windowId = `${app}-window`;
-            const window = document.getElementById(windowId);
-            if (state.minimizedWindows[windowId]) {
-                window.classList.remove('minimizing');
-                window.classList.add('active');
-                state.minimizedWindows[windowId] = false;
-                updateDockIndicators();
-                bringToFront(window);
-            } else if (window.classList.contains('active')) {
-                bringToFront(window);
-            } else {
-                window.classList.add('active');
-                bringToFront(window);
+        // Color palette selection
+        document.querySelectorAll(".color-palette").forEach((palette) => {
+          palette.addEventListener("click", () => {
+            document
+              .querySelectorAll(".color-palette")
+              .forEach((p) => p.classList.remove("active"));
+            palette.classList.add("active");
+            // Add palette change logic here
+          });
+        });
+
+        // Accent color selection
+        document.querySelectorAll(".accent-color").forEach((color) => {
+          color.addEventListener("click", () => {
+            document
+              .querySelectorAll(".accent-color")
+              .forEach((c) => c.classList.remove("active"));
+            color.classList.add("active");
+            const accentColor = color.dataset.color;
+            // Apply accent color to various elements
+            document.documentElement.style.setProperty(
+              "--accent-color",
+              accentColor
+            );
+          });
+        });
+
+        // Theme selection
+        document.querySelectorAll(".theme-option").forEach((theme) => {
+          theme.addEventListener("click", () => {
+            document
+              .querySelectorAll(".theme-option")
+              .forEach((t) => t.classList.remove("active"));
+            theme.classList.add("active");
+            // Add theme change logic here
+          });
+        });
+
+        // Settings sliders
+        document.querySelectorAll(".settings-slider").forEach((slider) => {
+          slider.addEventListener("input", (e) => {
+            const value = e.target.value;
+            // Handle different slider types based on their context
+            if (slider.min === "5" && slider.max === "40") {
+              // Blur intensity slider
+              document.documentElement.style.setProperty(
+                "--blur-intensity",
+                `${value}px`
+              );
             }
-        }
+          });
+        });
+      }
 
-        function toggleAppleMenu() {
-            alert('🍎 Apple Menu\n\nAbout This Mac\nSystem Settings...\nApp Store...\nRecent Items\n---\nForce Quit...\nSleep\nRestart...\nShut Down...');
-        }
+      init();
 
-        function initDock() {
-            document.querySelectorAll('.dock-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    openApp(item.dataset.app);
-                });
-            });
+      function executeCommand(cmd, output) {
+        const line = document.createElement("div");
+        line.className = "terminal-output";
+        line.textContent = `user@macOS ~ % ${cmd}`;
+        output.appendChild(line);
+        const response = document.createElement("div");
+        response.className = "terminal-output";
+        const command = cmd.split(" ")[0].toLowerCase();
+        switch (command) {
+          case "help":
+            response.textContent =
+              "Available commands: help, clear, date, whoami, ls, portfolio, contact";
+            break;
+          case "clear":
+            output.innerHTML = "";
+            return;
+          case "date":
+            response.textContent = new Date().toString();
+            break;
+          case "whoami":
+            response.textContent = "user - Full Stack Developer";
+            break;
+          case "ls":
+            response.textContent = "Portfolio  Projects  Resume  Contact";
+            break;
+          case "portfolio":
+            response.textContent = "Opening portfolio in Finder...";
+            setTimeout(() => openApp("finder"), 500);
+            break;
+          case "contact":
+            response.textContent =
+              "Email: devgurjar9897@gmail.com | GitHub: github.com/devchauhann";
+            break;
+          default:
+            response.textContent = `Command not found: ${command}. Type 'help' for available commands.`;
         }
-
-        function initWindows() {
-            document.querySelectorAll('.window').forEach(makeWindowDraggable);
-        }
-
-        function closeWindow(windowId) {
-            const window = document.getElementById(windowId);
-            window.classList.remove('active');
-            state.minimizedWindows[windowId] = false;
-            updateDockIndicators();
-        }
-
-        function minimizeWindow(windowId) {
-            const window = document.getElementById(windowId);
-            window.classList.add('minimizing');
-            setTimeout(() => {
-                window.classList.remove('active');
-                window.classList.remove('minimizing');
-                state.minimizedWindows[windowId] = true;
-                updateDockIndicators();
-            }, 500);
-        }
-
-        function maximizeWindow(windowId) {
-            const window = document.getElementById(windowId);
-            const isMaximized = window.dataset.maximized === 'true';
-            if (isMaximized) {
-                window.style.width = window.dataset.origWidth;
-                window.style.height = window.dataset.origHeight;
-                window.style.top = window.dataset.origTop;
-                window.style.left = window.dataset.origLeft;
-                window.dataset.maximized = 'false';
-            } else {
-                window.dataset.origWidth = window.style.width;
-                window.dataset.origHeight = window.style.height;
-                window.dataset.origTop = window.style.top;
-                window.dataset.origLeft = window.style.left;
-                window.style.width = '100vw';
-                window.style.height = 'calc(100vh - 32px)';
-                window.style.top = '24px';
-                window.style.left = '0';
-                window.dataset.maximized = 'true';
-            }
-        }
-
-        function updateDockIndicators() {
-            document.querySelectorAll('.dock-item').forEach(item => {
-                const app = item.dataset.app;
-                const windowId = `${app}-window`;
-                item.classList.toggle('minimized', state.minimizedWindows[windowId] === true);
-            });
-        }
-
-        function bringToFront(window) {
-            document.querySelectorAll('.window').forEach(w => {
-                w.style.zIndex = '1000';
-            });
-            window.style.zIndex = '1001';
-        }
-
-        function makeWindowDraggable(window) {
-            const header = window.querySelector('.window-header');
-            let isDragging = false;
-            let currentX, currentY, initialX, initialY;
-            header.addEventListener('mousedown', dragStart);
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', dragEnd);
-            function dragStart(e) {
-                if (e.target.classList.contains('window-control')) return;
-                initialX = e.clientX - window.offsetLeft;
-                initialY = e.clientY - window.offsetTop;
-                isDragging = true;
-                bringToFront(window);
-            }
-            function drag(e) {
-                if (!isDragging) return;
-                e.preventDefault();
-                currentX = e.clientX - initialX;
-                currentY = e.clientY - initialY;
-                window.style.left = currentX + 'px';
-                window.style.top = Math.max(24, currentY) + 'px';
-            }
-            function dragEnd() {
-                isDragging = false;
-            }
-        }
-
-        function inputNum(num) {
-            if (state.calcWaitingForOperand) {
-                state.calcValue = num;
-                state.calcWaitingForOperand = false;
-            } else {
-                state.calcValue = state.calcValue === '0' ? num : state.calcValue + num;
-            }
-            updateDisplay();
-        }
-
-        function inputOp(op) {
-            const inputValue = parseFloat(state.calcValue);
-            if (state.calcPrevValue === null) {
-                state.calcPrevValue = inputValue;
-            } else if (state.calcOperator) {
-                const result = calculate(state.calcPrevValue, inputValue, state.calcOperator);
-                state.calcValue = String(result);
-                state.calcPrevValue = result;
-            }
-            state.calcWaitingForOperand = true;
-            state.calcOperator = op;
-            updateDisplay();
-        }
-
-        function inputEquals() {
-            const inputValue = parseFloat(state.calcValue);
-            if (state.calcPrevValue !== null && state.calcOperator) {
-                const result = calculate(state.calcPrevValue, inputValue, state.calcOperator);
-                state.calcValue = String(result);
-                state.calcPrevValue = null;
-                state.calcOperator = null;
-                state.calcWaitingForOperand = true;
-                updateDisplay();
-            }
-        }
-
-        function clearCalc() {
-            state.calcValue = '0';
-            state.calcPrevValue = null;
-            state.calcOperator = null;
-            state.calcWaitingForOperand = false;
-            updateDisplay();
-        }
-
-        function toggleSign() {
-            state.calcValue = String(parseFloat(state.calcValue) * -1);
-            updateDisplay();
-        }
-
-        function inputPercent() {
-            state.calcValue = String(parseFloat(state.calcValue) / 100);
-            updateDisplay();
-        }
-
-        function calculate(a, b, op) {
-            switch (op) {
-                case '+': return a + b;
-                case '-': return a - b;
-                case '*': return a * b;
-                case '/': return a / b;
-                default: return b;
-            }
-        }
-
-        function updateDisplay() {
-            document.getElementById('calc-display').textContent = state.calcValue;
-        }
-
-        function initSafari() {
-            const urlInput = document.getElementById('safari-url');
-            const goBtn = document.getElementById('safari-go');
-            const frame = document.getElementById('safari-frame');
-            function loadURL() {
-                let url = urlInput.value.trim();
-                if (url && !url.startsWith('http')) {
-                    url = 'https://' + url;
-                }
-                frame.src = url;
-            }
-            goBtn.addEventListener('click', loadURL);
-            urlInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') loadURL();
-            });
-        }
-
-        function initTerminal() {
-            const input = document.getElementById('terminal-input');
-            const output = document.getElementById('terminal-output');
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    const command = input.value.trim();
-                    if (command) {
-                        executeCommand(command);
-                    }
-                    input.value = '';
-                }
-            });
-            function executeCommand(cmd) {
-                const line = document.createElement('div');
-                line.className = 'terminal-output';
-                line.textContent = `user@macOS ~ % ${cmd}`;
-                output.appendChild(line);
-                const response = document.createElement('div');
-                response.className = 'terminal-output';
-                const command = cmd.split(' ')[0].toLowerCase();
-                switch (command) {
-                    case 'help':
-                        response.textContent = 'Available commands: help, clear, date, whoami, ls, portfolio, contact';
-                        break;
-                    case 'clear':
-                        output.innerHTML = '';
-                        return;
-                    case 'date':
-                        response.textContent = new Date().toString();
-                        break;
-                    case 'whoami':
-                        response.textContent = 'user - Full Stack Developer';
-                        break;
-                    case 'ls':
-                        response.textContent = 'Portfolio  Projects  Resume  Contact';
-                        break;
-                    case 'portfolio':
-                        response.textContent = 'Opening portfolio in Finder...';
-                        setTimeout(() => openApp('finder'), 500);
-                        break;
-                    case 'contact':
-                        response.textContent = 'Email: devgurjar9897@gmail.com | GitHub: github.com/devchauhann';
-                        break;
-                    default:
-                        response.textContent = `Command not found: ${command}. Type 'help' for available commands.`;
-                }
-                output.appendChild(response);
-                output.parentElement.scrollTop = output.parentElement.scrollHeight;
-            }
-        }
-
-        function initFinder() {
-            document.querySelectorAll('.finder-item[data-section]').forEach(item => {
-                item.addEventListener('click', () => {
-                    const section = item.dataset.section;
-                    document.querySelectorAll('.finder-item').forEach(i => i.classList.remove('active'));
-                    item.classList.add('active');
-                    document.querySelectorAll('.portfolio-section').forEach(s => s.classList.remove('active'));
-                    document.getElementById(`section-${section}`).classList.add('active');
-                });
-            });
-        }
-
-        function initWidget() {
-            const widget = document.getElementById('desktop-widget');
-            let isDragging = false;
-            let currentX, currentY, initialX, initialY;
-            widget.addEventListener('mousedown', dragStart);
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', dragEnd);
-            function dragStart(e) {
-                initialX = e.clientX - widget.offsetLeft;
-                initialY = e.clientY - widget.offsetTop;
-                isDragging = true;
-            }
-            function drag(e) {
-                if (!isDragging) return;
-                e.preventDefault();
-                currentX = e.clientX - initialX;
-                currentY = e.clientY - initialY;
-                const maxX = window.innerWidth - widget.offsetWidth;
-                const maxY = window.innerHeight - widget.offsetHeight - 80;
-                currentX = Math.max(0, Math.min(currentX, maxX));
-                currentY = Math.max(24, Math.min(currentY, maxY));
-                widget.style.left = currentX + 'px';
-                widget.style.top = currentY + 'px';
-                widget.style.right = 'auto';
-            }
-            function dragEnd() {
-                isDragging = false;
-            }
-        }
-
-        init();
+        output.appendChild(response);
+        output.parentElement.scrollTop = output.parentElement.scrollHeight;
+      }
     </script>
-</body>
+  </body>
 </html>
